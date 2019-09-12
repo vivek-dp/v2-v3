@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script>$(document).ready(function(){</script>
+		<script>if (navigator.onLine == true){</script>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" />
+		<script>else if (navigator.onLine == false){</script>
+			<link rel="stylesheet" type="text/css" href="../css/semantic.css">
+		<script>}</script>
+	<script>})</script>
+	<script type="text/javascript" src="../js/semantic.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+
+	<style>
+		body {background-color: #1B1B1B; color: white;}
+		.field button {font-family: 'Poppins', sans-serif !important; font-weight: normal !important;}
+	</style>
+
+	<script>
+		$(document).ready(function(){
+			$('#select-wall').click(function(){
+				window.location = 'skp:select-wall-btn@'+1;
+			})
+
+			$('input[name=compmode]').click(function(){
+				$('#submitval').removeClass('disabled');
+			})
+
+			$('#submitval').click(function(){
+				json = {}
+				var val = $('input[name=compmode]:checked').val();
+				json['wall-mode'] = val
+				var str = JSON.stringify(json);
+				window.location = 'skp:submit_wall@' + str;
+			})
+
+			$('#skipval').click(function(){
+				window.location = 'skp:skipdlg@'+1;
+			})
+		});
+	</script>
+</head>
+
+<body>
+	<div class="ui container-fluid">
+		<div class="ui equal width form right-pad left-pad" style="padding-top: 10px;">
+			<div class="ui form" style="width: 88%;">
+				<div class="field">
+					<button class="mini ui fluid blue button" style="font-size: small;" id="select-wall">Select Wall</button>
+					<span class="mandatory" style="font-size: smaller;">NOTE: After clicked button, please select a wall.</span>
+				</div>
+
+				<div class="ui grid" style="margin: 0px; display: none;" id="wall_mode">
+					<div class="two column row" style="margin-top: 3em;">
+						<div class="column" style="padding: 0px;">
+							<div class="field">
+								<div class="ui radio checkbox">
+									<input type="radio" name="compmode" value="auto">
+									<label>Auto Place</label>
+								</div>
+							</div>
+						</div>
+						<div class="column" style="padding: 0px;">
+							<div class="field">
+								<div class="ui radio checkbox">
+									<input type="radio" name="compmode" value="associate">
+									<label>Only Associate</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="field" style="text-align: center;margin-top: 3em;">
+					<button class="mini ui disabled positive button" id="submitval">Apply</button>&emsp;
+					<button class="mini ui orange button" id="skipval">Skip</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="../js/load_html.js"></script>
+	<style>
+		#exportbtn {font-family: 'Poppins', sans-serif; font-weight: normal;}
+	</style>
+</head>
+<body>
+	<div class="ui equal width form right-pad">
+
+		<div class="column">
+			<div class="ui form">
+				<div class="field" id="showspace" style="display: none;">
+					<label style="color:chocolate;font-size: 14px;font-family: 'Poppins', sans-serif;">Space List :</label>
+					<div style="border:1px solid #424949;border-radius: 5px;padding: 10px">
+						<div style="border-bottom: 1px solid #424949; margin-bottom: 10px;">
+							<div class="ui checkbox" style="padding-bottom: 10px;"><input type="checkbox" id="checkAll"><label>Select all spaces</label></div>
+						</div>
+						<div id="load_list"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="column"><br>
+			<div class="field" style="text-align: center;">
+				<div class="tiny ui animated fade inverted disabled green button" id="exportbtn">
+					<div class="visible content">Export HTML</div>
+					<div class="hidden content"><i class="file alternate outline icon"></i></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

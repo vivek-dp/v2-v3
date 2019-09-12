@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="../js/load_welcome.js"></script>
+	<script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="../js/jquery-ui.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/datepicker.css">
+	<style>
+		.caps {text-transform: capitalize;}
+		.row span {font-family: 'Poppins', sans-serif !important; font-weight: 600;}
+		.content {font-family: 'Poppins', sans-serif !important; font-weight: normal;}
+		#name_title {padding: 0px !important;margin-right: 0px;}
+	</style>
+
+	<script>
+	  $( function() {
+	    var dateFormat = "dd-mm-yy",
+	      from = $( "#contract_date" )
+	        .datepicker({
+	          defaultDate: "+1w",
+	          changeMonth: true,
+	          changeYear: true,
+	          numberOfMonths: 1
+	        })
+	        .on( "change", function() {
+	          to.datepicker( "option", "minDate", getDate( this ) );
+	        }),
+	      to = $( "#target_date" ).datepicker({
+	        defaultDate: "+1w",
+	        changeMonth: true,
+	        changeYear: true,
+	        numberOfMonths: 1
+	      })
+	      .on( "change", function() {
+	        from.datepicker( "option", "maxDate", getDate( this ) );
+	      });
+	 
+	    function getDate( element ) {
+	      var date;
+	      try {
+	        date = $.datepicker.parseDate( dateFormat, element.value );
+	      } catch( error ) {
+	        date = null;
+	      }
+	 
+	      return date;
+	    }
+	  } );
+	  </script>
+</head>
+
+<body>
+	<div class="ui equal width form right-pad">
+		<div class="ui two column grid">
+			<div class="column">
+				<div class="ui form">
+					<div class="required field">
+						<label>Client Name:</label>
+						<div class="ui input">
+							<select class="ui dropdown" id="name_title" style="width: 55px;">
+								<option value="Mr">Mr.</option>
+								<option value="Mrs">Mrs.</option>
+								<option value="Miss">Miss.</option>
+							</select>
+							<input type="text" id="client_name" class="data-val caps" autofocus="" style="width: 1px;" pattern="[a-zA-Z!@#$%^*_|]{6,25}"></div>
+					</div>
+					<div class="required field">
+						<label>Apartment Name:</label>
+						<div class="ui input"><input type="text" id="apartment_name" class="data-val caps"></div>
+					</div>
+					<div class="required field">
+						<label>Project Name:</label>
+						<div class="ui input"><input type="text" id="project_name" class="data-val caps"></div>
+					</div>
+					<div class="required field">
+						<label>Designer Name:</label>
+						<div class="ui input"><input type="text" id="designer_name" class="data-val caps"></div>
+					</div>
+					<div class="required field">
+						<label>Contract Sign Date:</label>
+						<!-- <div class="ui input"><input type="date" id="contract_date" class="data-val"></div> -->
+						<div class="ui input"><input type="text" id="contract_date" class="data-val" readonly='true'></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="column">
+				<div class="ui form">
+					<div class="required field">
+						<label>Client ID:</label>
+						<div class="ui input"><input type="text" id="client_id" class="data-val caps"></div>
+					</div>
+					<div class="required field">
+						<label>Flat Number:</label>
+						<div class="ui input"><input type="text" id="flat_number" class="data-val caps"></div>
+					</div>
+					<div class="field">
+						<label>Project Number (factory):</label>
+						<div class="ui input"><input type="text" id="project_number" class="data-val caps" value="--"></div>
+					</div>
+					<div class="required field">
+						<label>Visualizer Name:</label>
+						<div class="ui input"><input type="text" id="visualizer_name" class="data-val caps"></div>
+					</div>
+					<div class="required field">
+						<label>Target Completion Date:</label>
+						<!-- <div class="ui input"><input type="date" id="target_date" class="data-val"></div> -->
+						<div class="ui input"><input type="text" id="target_date" class="data-val" readonly='true'></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+			<div class="ui grid">
+				<div class="row">
+					<div class="column">
+						<div class="field" style="margin-top: 3em;">
+							<span style="color:#DB2828;font-size:smaller;"><b>NOTE:</b> Please fill all mandatory fields. (*)</span>
+
+							<div class="tiny ui animated inverted fade green button" id="startproject" style="float: right;">
+								<div class="visible content">Start Project</div>
+								<div class="hidden content"><i class="angle double right icon"></i></i></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- <div>
+			<div style="width:50%;height:50%;padding-bottom:100%;position:relative;"><iframe src="https://giphy.com/embed/BYyLhBtSVgl2w" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/satisfying-sides-BYyLhBtSVgl2w">via GIPHY</a></p>
+		</div> -->
+	</div>
+</body>
+</html>

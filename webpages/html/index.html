@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script>
+		$(document).ready(function(){
+			if (navigator.onLine == true){</script>
+				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" />
+			<script>else if (navigator.onLine == false){</script>
+				<link rel="stylesheet" type="text/css" href="../css/semantic.css">
+			<script>}
+		})
+	</script>
+	</script>
+	<script type="text/javascript" src="../js/semantic.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+
+	<script type="text/javascript" src="../js/toastr.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/toastr.min.css">
+	<script type="text/javascript" src="../js/index.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+
+<body>
+	<div class="ui container-fluid">
+		<div class="ui active dimmer" id="loadicon" style="display: none;">
+	    <div class="ui text loader" style="font-size: 13px !important;">Please wait...</div>
+	  </div>
+	  <div class="ui active dimmer" id="loadgen" style="display: none;">
+	    <div class="ui text loader" style="font-size: 13px !important;">Generating HTML<br>Please wait a few minutes...</div>
+	  </div>
+
+	  <div class="ui grid">
+	  	<div class="four wide column" style="padding-right: 0em;">
+	  		<div style="height: 7%; padding: 17px 5px;">
+	  			<marquee direction="left" height="100%">
+	  				<div id="datenote" class="datesty"></div>
+	  			</marquee>
+	  		</div>
+	  		<input type="hidden" id="current_page" value="">
+	  		<div id="menus" class="ui vertical fluid tabular menu" style="height: 50%;margin-top: 0.35em;">
+	  			<a href="#" class="item active fbutton" id="add_pro_detail" onclick="pager(0)">Project Details<i class="angle double right icon" style="display: none;font-size: 1.1em;" id="p0"></i></a>
+	  			<a href="#" class="item fbutton" id="add_space" onclick="pager(5)">Create Space<i class="angle double right icon" style="display: none;font-size: 1.1em;" id="p5"></i></a>
+	  			<a href="#" class="item fbutton" id="add_comp" onclick="pager(2)">Components<i class="angle double right icon" style="display: none;font-size: 1.1em;" id="p2"></i></a>
+	  			<a href="#" class="item fbutton" id="add_attr" onclick="pager(3)">Attributes<i class="angle double right icon" style="display: none;font-size: 1.1em;" id="p3"></i></a>
+	  			<a href="#" class="item fbutton" id="exp_work_draw" onclick="pager(4)">Working Drawing<i class="angle double right icon" style="display: none;font-size: 1.1em;" id="p4"></i></a>
+	  			<a href="#" class="item fbutton" id="rio_utiliity" onclick="pager(6)">Rio Utilities<i class="angle double right icon" style="display: none;font-size: 1.1em;" id="p6"></i></a>
+	  			<!-- <a href="#" class="item fbutton" id="rio_setting" onclick="pager(1)">Settings<i class="hand point right icon" style="display: none;font-size: 1.1em;" id="p1"></i></a> -->
+	  		</div>
+	  	</div>
+
+	  	<div class="twelve wide column" id="page-info" style="background: #2e2e2e;height: -webkit-fill-available;">
+	  		<h1 class="head-logo">
+	  			<span style="margin-left: 10px;">
+	  				<span style="font-family: 'Poppins', sans-serif;">R<span style="font-size: 22px;">io</span>STD<span style="color: lightseagreen; font-size: 18px;"> v1.3</span></b></span>
+	  			</span>
+	  			<div class="pro-detail">
+	  				<div><span style="color: darkturquoise;padding-right: 2px;">Client Name:</span> <span id="cliname"></span></div>
+	  				<div><span style="color: darkturquoise;padding-right: 2px;">Project Name:</span> <span id="proname"></span></div>
+	  			</div>
+	  		</h1>
+	  		<div id="page_content" style="height: 700px;overflow-x: scroll;"></div>
+	  	</div>
+	  </div>
+	</div>
+</body>
+</html>

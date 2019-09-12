@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" />
+	<script type="text/javascript" src="../js/semantic.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<script type="text/javascript" src="../js/load_multilam.js"></script>
+
+	<style>
+		body {background: #2e2e2e; color: white;}
+		.lamcol {padding-left: 0px; padding-right: 0px;text-align: -webkit-center;}
+		.lamname {margin-top: 5px;word-wrap: break-word;}
+		.lamframe {width:100%; height:120px;margin-top: .5em;}
+		.lamframe img {border:1px solid #585858;border-radius: 5px;}
+		.lamframe button{position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);visibility: hidden;}
+		.lamframe:hover button{visibility: visible;}
+	</style>
+</head>
+
+<body>
+	<div class="ui container-fluid">
+		<div class="ui equal width form left-pad right-pad">
+			<div class="column" style="margin-bottom: 2em;padding-top: 1em;">
+				<div class="ui form">
+					<input type="hidden" id="root_path" value="">
+					<div class="field" style="border:1px solid #424949;border-radius: 5px;padding-bottom: 2em;">
+						<label style="color:chocolate;">Shutter Finish Lamination:</label>
+						<input type="hidden" id="multi_shutter_type" value="">
+						<input type="hidden" id="multi_shutter_value" value="">
+						<div class="ui equal width grid" style="margin-bottom: 0px;">
+							<div class="column"><div class="lamframe lamcol" id="multi_shutter_frame"></div></div>
+							<div class="column"><label style="color:cadetblue;"><u>Shutter Lamination Name:</u></label><div class="lamname" id="multi_shutter_name"></div></div>
+						</div>
+					</div><br>
+
+					<h5 class="ui header" style="color:chocolate;">Carcass Finish Codes</h5>
+					<div class="ui equal width grid" style="border: 1px solid #424949;">
+						<div class="column lamcol" style="border-right: 1px solid #424949;">
+							<div class="field">
+								<label style="color:cadetblue;"><u>Right Lamination:</u></label>
+								<input type="hidden" id="multi_left_preval" value="">
+								<input type="hidden" id="multi_left_type" value="">
+								<input type="hidden" id="multi_left_value" value="">
+								<div id="multi_left_frame" class="lamframe"></div>
+								<div id="multi_left_name" class="lamname"></div>
+							</div>
+						</div>
+						<div class="column lamcol" id="show_rightlam" style="border-right: 1px solid #424949;">
+							<div class="field">
+								<label style="color:cadetblue;"><u>Left Lamination:</u></label>
+								<input type="hidden" id="multi_right_preval" value="">
+								<input type="hidden" id="multi_right_type" value="">
+								<input type="hidden" id="multi_right_value" value="">
+								<div id="multi_right_frame" class="lamframe"></div>
+								<div id="multi_right_name" class="lamname"></div>
+							</div>
+						</div>
+						<div class="column lamcol" id="show_toplam">
+							<div class="field">
+								<label style="color:cadetblue;"><u>Top Lamination:</u></label>
+								<input type="hidden" id="multi_top_preval" value="">
+								<input type="hidden" id="multi_top_type" value="">
+								<input type="hidden" id="multi_top_value" value="">
+								<div id="multi_top_frame" class="lamframe"></div>
+								<div id="multi_top_name" class="lamname"></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="field" id="mapply_all">
+						<div class="ui checkbox" style="margin-top: 2em;">
+							<input type="checkbox" id="mapplyall">
+							<label>Apply for all position</label>
+						</div>
+					</div>
+
+					<div class="field" style="text-align: center;padding-top: 2em;" id="mul_upt_lam">
+					<button class="tiny ui inverted green button" id="upt_multilam">Update</button>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

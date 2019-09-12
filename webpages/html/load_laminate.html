@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script>
+		$(document).ready(function(){
+			if (navigator.onLine == true){</script>
+				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" />
+			<script>else if (navigator.onLine == false){</script>
+				<link rel="stylesheet" type="text/css" href="../css/semantic.css">
+			<script>}
+		})
+	</script>
+	<script type="text/javascript" src="../js/semantic.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+
+	<script type="text/javascript" src="../js/load_lamination.js"></script>
+	<script type="text/javascript" src="../js/toastr.min.js"></script>
+	<script type="text/javascript" src="../js/jscolor.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/toastr.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+
+	<style>
+		img {width: 80px; height: 120px;}
+		img:hover{transform: scale(1.5);transition: all .5s ease-out;cursor: pointer;}
+		.ui.segment {background: transparent;color: #ccc;}
+		.ui.grid>.row {padding-top: 0px; padding-bottom: 0px;}
+		.ui.segment {padding: 0px;}
+		#place-img {margin-left: 5%; margin-right: 5%;overflow-y: scroll;height: 430px;padding-bottom: 2em;margin-top: 5px;}
+		.ui.grid>.column:not(.row) {text-align: center;}
+		.ui.grid {margin: 0px;}
+		.cbtn{
+			background-image: linear-gradient(to bottom right, red, yellow) !important;
+			color: white !important;
+			font-family: 'Poppins', sans-serif !important;
+			font-weight: normal !important;
+		}
+		#search_val::-webkit-input-placeholder {
+		  font-style: italic;
+		}
+		.lam_name {height: 30%}
+		.lam_img img {border:1px solid grey; border-radius: 7%;}
+	</style>
+</head>
+
+<body>
+	<div class="ui container">
+		<div class="ui equal width center aligned padded grid" style="margin-top: 1em;">
+			<div class="column">
+				<div class="ui form">
+					<div class="field">
+						<div class="ui buttons" style="width: 75%">
+						  <button class="ui button btnactive" id="matcode">Material Code</button>
+						  <div class="or"></div>
+						  <button class="ui button" id="colcode">Color Picker</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" id="material_type" value="material">
+
+		<div class="ui equal width center aligned padded grid">
+			<div class="column">
+				<div id="lam_block" style="margin-top:2%;margin-left: 10%;margin-right: 10%;"></div>
+			</div>
+			<div class="column" id="col_block" style="display: none; width: 100%;">
+				<div class="ui grid">
+					<div class="row">
+						<div class="nine wide column" style="padding-left: 0px;">
+							<div class="ui form">
+								<div class="field">
+									<div class="ui labeled input">
+										<div class="ui label">Color Code:</div>
+										<div class="ui input"><input type="text" class="jscolor {closable:true,closeText:'Close',}" id="color_code" onchange="update(this.value)"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="seven wide column">
+							<div id="react" style="width:100%; height:200px;background: white;"></div>
+						</div>
+					</div>
+
+					<div class="row" style="margin-top: 1em;">
+						<div class="sixteen wide column" style="text-align: center;">
+							<div class="ui form">
+								<div class="field">
+									<button class="small ui positive button" id="update_color">Update</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="ui segment" id="lam_types" style="display: none;border:2px solid darkslategrey;">
+			<div class="ui equal width padded grid">
+				<div class="row" style="border-bottom: 2px solid darkslategrey; padding-bottom: 1%;">
+			    <div class="column"><h4 style="padding-top: 10px;">Lamination Codes</h4></div>
+			    <div class="column">
+			    	<div class="ui form">
+			    		<div class="field">
+			    			<div class="ui icon input">
+					      	<input type="text" id="search_val" placeholder="Search..."><i class="search icon" style="color: #ccc;"></i>
+					      </div>
+			    		</div>
+			    	</div>
+			    </div>
+			  </div>
+			</div>
+			<div id="place-img"></div>
+		</div>
+	</div>
+
+	<script>
+		function update(jscolor) {
+		  $('#react').css('backgroundColor', '#' + jscolor);
+		}
+</script>
+</body>
+</html>

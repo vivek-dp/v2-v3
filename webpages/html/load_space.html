@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		.iconbor>i {font-size: 22px !important; color: dimgrey;}
+		.field button, p {font-family: 'Poppins', sans-serif !important; font-weight: normal !important;}
+		.btnr {text-align: -webkit-center;margin-top: 20% !important;}
+		.btn1 {background: #009ED8 !important; color: white !important;}
+		.btn2 {background: #FE5F55 !important; color: white !important;}
+		.btn3 {background: #C673B3 !important; color: white !important;}
+		.btn4 {background: #139675 !important; color: white !important;}
+	</style>
+	<script>
+		$(document).ready(function(){
+			$('#loadicon').css('display', 'none');
+			$('#btn_wall').on('click', function(){
+				window.location = 'skp:method_addwall@' + 1;
+			});
+
+			$('#btn_door').on('click', function(){
+				window.location = 'skp:method_adddoor@' + 1;
+			});
+
+			$('#btn_window').on('click', function(){
+				window.location = 'skp:method_addwindow@' + 1;
+			});
+
+			$('#btn_room').on('click', function(){
+				window.location = 'skp:method_addroom@' + 1;
+			});
+
+			$('#add_face').on('click', function(){
+				window.location = 'skp:method_addface@' + 1;
+			});
+
+			$('#delete-room').click(function(){
+				window.location = 'skp:delete_room@'+1;
+			});
+		});
+
+		function spaceAlert(val){
+			if (val[1] != 0){
+				toastr.success(val[0]+'s are added successfully!', 'Success')
+			}else{
+				toastr.info(val[0]+' edges are not found!', 'Info')
+			}
+		}
+	</script>
+</head>
+<body>
+	<div class="ui equal width form right-pad">
+		<div class="column">
+			<div class="ui form">
+				<div class="field">
+					<button class="fluid small ui button btn1" id="btn_wall">Add Wall</button>
+				</div>
+
+				<div class="field" style="text-align: -webkit-center;">
+					<div class="iconbor"><i class="arrow circle down icon"></i></div>
+				</div>
+
+				<div class="field" style="">
+					<button class="fluid small ui button btn2" id="btn_door">Add Door</button>
+				</div>
+
+				<div class="field" style="text-align: -webkit-center;">
+					<div class="iconbor"><i class="arrow circle down icon"></i></div>
+				</div>
+
+				<div class="field">
+					<button class="fluid small ui button btn3" id="btn_window">Add Window</button>
+				</div>
+
+				<div class="field" style="text-align: -webkit-center;">
+					<div class="iconbor"><i class="arrow circle down icon"></i></div>
+				</div>
+				
+				<div class="field">
+					<button class="fluid small ui button btn4" id="add_face">Add Face</button>
+					<p style="color:#DB2828;line-height: 30px;"><span style="font-size: smaller;font-weight:600;">*<b>NOTE:</b> Click <u>Add Face</u>, If you have imported 2D diagram from AutoCAD.</span></p>
+				</div>
+
+				<div class="field btnr">
+					<button class="massive ui google plus button" id="btn_room">&nbsp;&nbsp;<i class="home icon"></i><br><br>Add Room</button>
+					<p style="color:#DB2828;line-height: 20px;"><span style="font-size: smaller;font-weight:600;">*<b>NOTE:</b> After clicked <b>Add Room</b> button, Please click on a space to add room, otherwise press Esc button to deactivate tool.</span></p>
+				</div>
+
+				<div class="field" style="margin-top: 2em;">
+					<button class="fluid small ui inverted brown button" id="delete-room">Delete Room</button>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>

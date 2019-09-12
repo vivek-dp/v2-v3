@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link rel="stylesheet" type="text/css" href="../css/semantic.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" />
+	<script type="text/javascript" src="../js/semantic.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+
+	<script type="text/javascript" src="../js/toastr.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/toastr.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+	<script type="text/javascript" src="../js/index.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+
+	<style>
+		.fontadd {font-family: 'Poppins', sans-serif;}
+		#net-status {letter-spacing:0.2px;}
+	</style>
+</head>
+
+<body>
+	<div class="ui active dimmer" id="load1" style="display: none;">
+    <div class="ui text loader">Loading..</div>
+  </div>
+	<div class="ui active dimmer" id="loadicon" style="display: none;">
+    <div class="ui text loader">Initializing...<br>Please wait a few seconds...</div>
+  </div>
+	<div class="ui container-fluid fontadd">
+		<h1 class="head-logo" style="text-align: center;">R<span style="font-size: 22px;">io</span>STD<span style="color: darkcyan; font-size: 18px; letter-spacing: 1px;"> v1.3</span></b></h1>
+	</div>
+
+	<div class="ui container">
+		<div class="ui grid" style="margin: auto;">
+			<div class="ui equal wide column">
+				<div class="column">
+			    <div class="ui raised segment" style="background: #333 !important;">
+			      <div class="ui red ribbon label" style="height: 35px; font-size: 15px !important;"><i class="user outline icon"></i>Login</div>
+			      <div class="ui form"><br>
+			      	<div class="field">
+			      		<div class="ui left icon input">
+			      			<input type="email" id="email" placeholder="Email..." onblur="chkemail()" autofocus="true" value="test_user1@decorpot.com">
+			      			<i class="envelope outline icon" style="color: white;"></i>
+			      		</div>
+			      	</div>
+
+			      	<div class="field">
+			      		<div class="ui left icon input">
+			      			<input type="password" id="password" placeholder="Password..." value="password1">
+			      			<i class="lock icon" style="color: white;"></i>
+			      		</div>
+			      	</div><br>
+
+			      	<div class="ui two column grid" style="margin-bottom: 0em;">
+			      		<div class="column">
+			      			<div id="net-status" class="net-text"></div>
+			      		</div>
+			      		<div class="column" style="text-align: right;">
+			      			<button class="ui inverted red button" id="clicklogin">Login</button>
+			      		</div>
+			      	</div>
+			      	<div id="off-notes" class="net-note"></div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function(){
+			$('#load1').css('display', 'block')
+			window.location = 'skp:checkonline@'+ 1;
+		});
+
+		function passStatus(val){
+			$('#load1').css('display', 'none')
+			if (val == 0){
+				$('#off-notes').html('<b><u>NOTE:</u></b> Connect to the Internet, reopen RioSTD.')
+				$('#net-status').html('<div class="ui red empty circular label"></div>&nbsp;&nbsp;Offline')
+				$('#net-status').css('color', '#DB2828')
+				$('#clicklogin').addClass('disabled');
+			}else if (val == 1){
+				$('#net-status').html('<div class="ui green empty circular label"></div>&nbsp;&nbsp;Online')
+				$('#net-status').css('color', 'green')
+			}
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="../js/load_add_comp.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<style>
+		.ui.grid>.row {padding-bottom: 0px !important; padding-top: 0.2rem !important;}
+		.ui.grid>.row>.column {padding-right: 0px !important; text-align: left !important;}
+		.ui.grid>.column:not(.row) {padding-top: 1rem; padding-bottom: 0rem;}
+		.ui.stackable.grid>.row>.column {padding: 0.2rem 0.9rem!important;}
+		.fieldcls {border-color: dimgray; border-radius: 5px;margin-top: 10px;padding-bottom: 1.5em;padding-top: 1em;}
+		.mini {font-family: 'Poppins', sans-serif !important; font-weight: normal !important;}
+		.ff {font-family: 'Poppins', sans-serif !important; font-weight: normal !important; font-size: small !important;}
+		.ui.toggle.checkbox input:checked~label {color: white !important;}
+		#placeimg img {border-radius: 3px;}
+	</style>
+</head>
+<body>
+	<input type="hidden" id="page_type" value="0">
+	<div class="ui equal width form right-pad">
+		<div class="column">
+			<label style="vertical-align: top; font-weight: bold;">Auto Mode: </label>
+			<label class="switch"><input type="checkbox" id="auto-place"><div class="slider round"></div></label>
+		</div>
+		<input type="hidden" id="add_wall" value="0">
+
+		<div class="column" id="showauto" style="display: none;">
+			<div class="ui grid" style="margin:1px 1px;">
+				<div class="ten wide column" style="border: 1px solid grey;border-radius: 5px;">
+					<h5 class="ui dividing header" style="margin-top: -10px; color:teal;">Position:</h5>
+					<div class="ui grid" style="margin-bottom: 0px;">
+						<div class="row" id="auto_front" style="display: none;">
+							<div class="column" style="margin: 0em 0em 0.5em;">
+								<div class="field">
+						    	<div class="ui radio checkbox">
+						    		<input type="radio" name="autoposition" id="front" value="front">
+						    		<label>Front</label>
+						    	</div>
+						    </div>
+						  </div>
+						</div>
+						<div class="two column row">
+								<div class="column">
+									<div class="field">
+							    	<div class="ui radio checkbox">
+							    		<input type="radio" name="autoposition" id="top" value="top">
+							    		<label>Top</label>
+							    	</div>
+							    </div>
+
+									<div class="field">
+							    	<div class="ui radio checkbox">
+							    		<input type="radio" name="autoposition" id="top_left" value="top_left">
+							    		<label>Top Left</label>
+							    	</div>
+							    </div>
+
+									<div class="field">
+							    	<div class="ui radio checkbox">
+							    		<input type="radio" name="autoposition" id="top_right" value="top_right">
+							    		<label>Top Right</label>
+							    	</div>
+							    </div>
+								</div>
+								<div class="column">
+									<div class="field">
+							    	<div class="ui radio checkbox">
+							    		<input type="radio" name="autoposition" id="bottom" value="bottom">
+							    		<label>Bottom</label>
+							    	</div>
+							    </div>
+
+									<div class="field">
+							    	<div class="ui radio checkbox">
+							    		<input type="radio" name="autoposition" id="bottom_left" value="bottom_left">
+							    		<label>Bottom Left</label>
+							    	</div>
+							    </div>
+									<div class="field">
+							    	<div class="ui radio checkbox">
+							    		<input type="radio" name="autoposition" id="bottom_right" value="bottom_right">
+							    		<label>Bottom Right</label>
+							    	</div>
+							    </div>
+							  </div>
+						</div>
+					</div>
+				</div>
+				<div class="six wide column" style="margin-top: -1em;">
+					<div id="placeimg" style="height: 125px;"></div>
+				</div>
+			</div>
+		</div>
+
+		<div id="load_space_list" style="margin-top:10px;"></div>
+		<div id="load_maincat" style="margin-top:10px;"></div>
+		<div id="load_subcat" style="margin-top:10px;"></div>
+		<input type="hidden" id="carcass_code" value="">
+		<div class="ui form">
+			<div class="field">
+				<div class="ui grid">
+					<div style="display: none;width:100%;margin-top: 1em;" id="loadfitch">
+						<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+					</div>
+					<div class="three column row" style="margin-top: 2em;">
+						<div class="column" id="btn-carcass" style="display: none; text-align: center !important;"><button class="mini ui vk button">Select Carcass</button></div>
+						<div class="column" id="btn-shut" style="display: none; text-align: center !important;"><button class="mini ui vk button">Select Shutter</button></div>
+						<div class="column" id="btn-int" style="display: none; text-align: center !important;"><button class="mini ui vk button">Select Internal</button></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" id="load_carcass" value="0">
+		
+		<div id="load_comp_detail" style="display: none; margin-top:1em;">
+			<div class="ui grid">
+				<div class="sixteen wide column">
+					<div class="field">
+						<fieldset class="fieldcls">
+							<legend style="color:#FF2000;">&nbsp;Component Details:&nbsp;</legend>
+							<div class="ui equal width center aligned grid">
+								<div class="row" id="car-name"></div>
+								<div class="row" id="door-type"></div>
+								<input type="hidden" value="" id="shut_code">
+								<div class="row" id="shutter-code"></div>
+								<div class="row" id="shutter-type"></div>
+								<input type="hidden" id="shutter_open" value="">
+								<div class="row" id="shutter-open" style="display: none;">
+									<div class="four wide column">Shutter Open:</div>
+									<div class="twelve wide column" style="float: right;">
+										<div style="width:50%;float:left;">
+											<div class="field">
+												<div class="ui radio checkbox">
+													<input type="radio" name="shopen" value="LHS" onclick="chkopen(this.value)" id="lhs">
+													<label>Left Hand Side</label>
+												</div>
+											</div>
+										</div>
+										<div style="width:50%;float:right;">
+											<div class="field">
+												<div class="ui radio checkbox">
+													<input type="radio" name="shopen" value="RHS" onclick="chkopen(this.value)" id="rhs">
+													<label>Right Hand Side</label>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" id="shut-open-text"></div>
+							</div>
+
+							<input type="hidden" value="" id="internal_code">
+							<div class="row" id="internal-cat" style="margin-top: 1.5em;"></div>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="sixteen wide column" style="margin: 3em 0em 1em 0em;" id="showbtns">
+			<div style="text-align: center;">
+				<button class="ui disabled positive button ff" id="expcomp" onclick="createcomp(0)">Create Component</button>
+				<button class="ui disabled teal button ff" id="uptcomp" onclick="createcomp(1)">Update</button>
+				<button class="ui disabled twitter icon right floated button ff" id="rotatebtn"><img src="../images/rotate.png" width="20" height="15"></i></button>
+			</div>
+		</div>
+
+		<div class="sixteen wide column" style="margin: 3em 0em 1em 0em; display: none;" id="showadd">
+			<div style="text-align: center;">
+				<button class="ui disabled positive button ff" id="placecomp" onclick="createcomp(0)">Place Component</button>
+				<button class="ui disabled twitter icon right floated button ff" id="rotatebt"><img src="../images/rotate.png" width="20" height="15"></i></button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$('.ui.dropdown').dropdown();
+		$('.ui.radio.checkbox').checkbox();
+	</script>
+</body>
+</html>

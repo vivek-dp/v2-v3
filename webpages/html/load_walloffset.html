@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" />
+	<script type="text/javascript" src="../js/semantic.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<script type="text/javascript" src="../js/toastr.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/toastr.min.css">
+	
+	<style>
+		body {background: #2e2e2e; color: white;}
+		@media only screen and (max-width: 767px){
+			.ui.container {margin-right: 4em !important;}
+		}
+		.mlabel {color: #ccc;}
+		.mbtn {font-family: 'Poppins', sans-serif !important; font-weight: normal !important;}
+	</style>
+
+	<script>
+		$(document).ready(function(){
+			$(".num").keypress(function (e) {
+				if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+		      toastr.info("Numbers only allowed!", "Info");
+		      return false;
+		    }
+		  });
+
+			if ($('#from_side').is(':checked') == false){
+				$('#off_side').val('left');
+				$('#side_label').html('<span style="line-height: 35px;">From Left (mm) :</span>');
+			}
+
+			$('#from_side').change(function(){
+				if ($(this).is(':checked') == true){
+					$('#off_side').val('right');
+					$('#side_label').html('<span style="line-height: 35px;">From Right (mm) :</span>');
+				}else{
+					$('#off_side').val('left');
+					$('#side_label').html('<span style="line-height: 35px;">From Left (mm) :</span>');
+				}
+			})
+
+			$('#submit-btn').click(function(){
+				json = {};
+				offarr = [];
+				offarr.push($('#from_floor').val());
+				offarr.push($('#side_offset').val());
+				json['xy_point'] = offarr
+				json['offset_side'] = $('#off_side').val();
+				var str = JSON.stringify(json);
+				window.location = 'skp:send_walloffset@'+ str;
+			})
+
+			$('#cancel-btn').click(function(){
+				offarr = [];
+				json = {};
+				offarr.push('0');
+				offarr.push('0');
+				json['xy_point'] = offarr;
+				json['offset_side'] = '0'
+
+				var str = JSON.stringify(json);
+				window.location = 'skp:send_walloffset@' + str;
+			})
+		});
+		String.prototype.capitalize = function() {
+		  return this.charAt(0).toUpperCase() + this.slice(1);
+		}
+	</script>
+</head>
+
+<body>
+	<div class="ui container">
+		<div class="ui equal width form right-pad" style="margin-top: 10px;">
+			<div class="ui two column grid">
+				<div class="column" style="padding: 10px 0px 10px 5px;">
+					<div class="field mlabel">
+						<span style="line-height: 35px;">From Floor (mm):</span>
+					</div>
+					<div class="field mlabel" style="padding-top: 5px;">
+						<span style="line-height: 35px;">Select Side :</span>
+					</div>
+					<div class="field mlabel" id="side_label" style="padding-top: 5px;"></div>
+				</div>
+
+				<div class="column" style="padding: 10px 5px 0px 0px;">
+					<div class="field">
+						<div class="ui input"><input type="text" id="from_floor" class="num" autofocus="" value="100"></div>
+					</div>
+
+					<div class="field">
+						<input type="hidden" id="off_side">
+						<label class="switch1"><input type="checkbox" id="from_side"><div class="slider1 round"></div></label>
+					</div>
+
+					<div class="field" id="side_offview">
+						<div class="ui input"><input type="text" id="side_offset" class="num" value="0"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="ui grid">
+				<div class="row">
+					<div class="column" style="text-align: -webkit-center;">
+						<button class="mini ui google plus button mbtn" id="cancel-btn">Cancel</button>&emsp;
+						<button class="mini ui positive button mbtn" id="submit-btn">Submit</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

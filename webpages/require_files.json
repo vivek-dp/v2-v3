@@ -1,0 +1,13 @@
+controller:{
+	"login_control.rb"
+	"load_toolbar.rb"
+	"working_drawing.rb"
+	"aws_database.rb"
+	"aws_downloader.rb"
+	"dp_core.rb"
+	"add_attribute.rb"
+	"create_comp.rb"
+	"home_file.rb"
+	"export_html.rb"
+	"dp_core.rb"
+}

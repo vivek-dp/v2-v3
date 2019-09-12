@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		.uptbtn {text-align: center;margin-top: 3em !important;}
+	</style>
+
+	<script>
+		$(document).ready(function(){
+			window.location = 'skp:get_setting_cal@' + 1;
+			
+			$('#updateset').click(function(){
+				json = {}
+				json['min_filler'] = $('#min_filler').val();
+				json['max_filler'] = $('#max_filler').val();
+
+				var str = JSON.stringify(json);
+				$('#loadicon').css('display', 'block');
+				setTimeout(function() {window.location = 'skp:uptsetting@'+ str;}, 500);
+			})
+		});
+
+		function hideLoad(){
+			$('#loadicon').css('display', 'none');
+			toastr.success('Settings are updated successfully!', 'Success')
+		}
+	</script>
+</head>
+<body>
+	<div class="ui equal width form right-pad">
+		<div class="ui two column grid">
+			<div class="column">
+				<div class="ui form">
+					<div class="field">
+						<label>Minimum Filler Length</label>
+						<div class="ui input"><input type="text" id="min_filler"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="column">
+				<div class="ui form">
+					<div class="field">
+						<label>Maximum Filler Length</label>
+						<div class="ui input"><input type="text" id="max_filler"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="field uptbtn">
+			<button class="mini ui positive button" id="updateset">Update</button>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="../js/load_add_attr.js"></script>
+	<style>
+		button {font-family: 'Poppins', sans-serif !important; font-weight: normal !important;}
+		.lamname {margin-top: 5px;word-wrap: break-word;}
+		.lamcol {padding-left: 0px; padding-right: 0px;text-align: -webkit-center;}
+		.lamframe {width:100%; height:120px;margin-top: .5em;border-radius: 5px;}
+		.lamframe img {border:1px solid #585858;border-radius: 5px;}
+		.lamframe button{position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);visibility: hidden;}
+		.lamframe:hover button{visibility: visible;}
+		.lamimg {margin-left: 37px;border-radius: 5px;}
+	</style>
+</head>
+
+<body>
+	<input type="hidden" id="rootpath" value="">
+	<div class="ui equal width form right-pad">
+		<div class="column" style="margin-bottom: 2em;">
+			<div class="ui form">
+				<div class="field">
+					<div class="ui labeled input">
+						<div class="ui label">Raw Material:<span class="mandatory"> *</span></div>
+						<div class="ui input"><input type="text" id="attr_raw_material" class="inp-ltr"></div>
+					</div>					
+				</div>
+
+				<div class="field">
+					<div class="ui labeled input">
+						<div class="ui label">Handles:<span class="mandatory"> *</span></div>
+						<div class="ui input"><input type="text" id="attr_handles_type" class="inp-ltr"></div>
+					</div>
+				</div>
+
+				<div class="field">
+					<div class="ui labeled input">
+						<div class="ui label">Soft Close:<span class="mandatory"> *</span></div>
+						<select class="ui dropdown" id="attr_soft_close">
+							<option value="0">Select...</option>
+							<option value="yes">Yes</option>
+							<option value="no">No</option>
+						</select>	
+					</div>
+				</div>
+
+				<div class="field">
+					<div class="ui labeled input">
+						<div class="ui label">Finish Type:<span class="mandatory"> *</span></div>
+						<select class="ui dropdown" id="attr_finish_type" onchange="changeFinish(this.value)">
+							<option value="0">Select...</option>
+							<option value="acrylic">Acrylic</option>
+							<option value="duco">Duco</option>
+							<option value="laminate">Lamination</option>
+							<option value="veneer">Veneer</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="field">
+					<div class="ui labeled input">
+						<div class="ui label">Product Code:<span class="mandatory"> *</span></div>
+						<div class="ui input" onclick="readOly()"><input type="text" id="attr_product_code" disabled></div>
+					</div>
+				</div>
+
+				<div class="field">
+					<div class="ui labeled input">
+						<div class="ui label">Product Name:<span class="mandatory"> *</span></div>
+						<div class="ui input" onclick="readOly()"><input type="text" id="attr_product_name" disabled></div>
+					</div>
+				</div>
+
+				<div class="field" id="show_int" style="display: none;">
+					<div class="ui labeled input">
+						<div class="ui label">Internal finish code:<span class="mandatory">*</span></div>
+						<div class="ui input"><input type="text" id="attr_internal_finish"></div>
+					</div>
+				</div>
+
+				<div class="field" id="show_shutter">
+					<label style="color:chocolate;">Shutter Finish Lamination:<span class="mandatory">*</span></label>
+					<input type="hidden" id="front_mat_type" value="">
+					<input type="hidden" id="front_lam_value" value="">
+					<div class="ui equal width grid" style="margin-bottom: 0px;">
+						<div class="column"><div class="lamframe lamcol" id="front_frame"></div></div>
+						<div class="column"><label style="color:cadetblue;"><u>Shutter Lamination Name:</u></label><div class="lamname" id="front_name"></div></div>
+					</div>
+				</div>
+
+				<input type="hidden" id="show_view" value="">
+				<div id="finish_head" style="display: none; margin-top: 3em;">
+					<h5 class="ui header" style="color:chocolate;">Carcass Finish Codes <span class="mandatory"> *</span></h5>
+					<div class="ui equal width grid" style="margin-bottom: 0px;border: 1px solid #424949;margin-left: 0.01rem;">
+						<div class="column lamcol" id="show_leftlam" style="display: none;border-right: 1px solid #424949;">
+							<div class="field">
+								<label style="color:cadetblue;"><u>Right Lamination:</u></label>
+								<input type="hidden" id="left_preval" value="">
+								<input type="hidden" id="left_mat_type" value="">
+								<input type="hidden" id="left_lam_value" value="">
+								<div id="left_frame" class="lamframe"></div>
+								<div id="left_name" class="lamname"></div>
+							</div>
+						</div>
+						<div class="column lamcol" id="show_rightlam" style="display: none;border-right: 1px solid #424949;">
+							<div class="field">
+								<label style="color:cadetblue;"><u>Left Lamination:</u></label>
+								<input type="hidden" id="right_preval" value="">
+								<input type="hidden" id="right_mat_type" value="">
+								<input type="hidden" id="right_lam_value" value="">
+								<div id="right_frame" class="lamframe"></div>
+								<div id="right_name" class="lamname"></div>
+							</div>
+						</div>
+						<div class="column lamcol" id="show_toplam" style="display: none;">
+							<div class="field">
+								<label style="color:cadetblue;"><u>Top Lamination:</u></label>
+								<input type="hidden" id="top_preval" value="">
+								<input type="hidden" id="top_mat_type" value="">
+								<input type="hidden" id="top_lam_value" value="">
+								<div id="top_frame" class="lamframe"></div>
+								<div id="top_name" class="lamname"></div>
+							</div>
+						</div>
+					</div>
+					<div class="field" style="display: none;" id="apply_all">
+						<div class="ui checkbox" style="margin-top: 8px;">
+							<input type="checkbox" id="applyall">
+							<label>Apply for all position</label>
+						</div>
+					</div>
+				</div>
+				
+				<div class="field" style="text-align: center;" id="uptbtn">
+					<button class="tiny ui inverted green button" onclick="uptvalue()">Update</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$('.ui.dropdown').dropdown();
+	</script>
+</body>
+</html>

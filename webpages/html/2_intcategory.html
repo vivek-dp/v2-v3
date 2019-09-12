@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" />
+	<script type="text/javascript" src="../js/semantic.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+
+	<script type="text/javascript" src="../js/toastr.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/toastr.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+	<script type="text/javascript" src="../js/load_add_comp.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<script>
+		$(document).ready(function(){
+			window.location = 'skp:load_cat@'+ 2;
+			
+			$('#placeint').click(function(){
+				json = {}
+				if ($('#left_internal').val().length != 0){
+					json['left'] = $('#left_internal').val();
+				}else{
+					toastr.error('Please select a Left Internal', 'Error');
+					return false
+				}
+				if ($('#right_internal').val().length != 0){
+					json['right'] = $('#right_internal').val();
+				}else{
+					toastr.error('Please select a Right Internal', 'Error');
+					return false
+				}
+				str = JSON.stringify(json)
+				window.location = 'skp:getintcat@' + str;
+			})
+		});
+
+		function checkboth(val){
+			spval = val.split(',')
+			$('#left_internal').val(spval[0])
+			$('#right_internal').val(spval[1])
+			$('.checkRadio').each(function(){
+				if ($(this).val().includes(spval[0]) == true || $(this).val().includes(spval[1]) == true){
+					this.checked = true;
+				}else{
+					this.checked = false;
+				}
+			})
+		}
+
+		function passintval(inp){	$('#place_int_img').html(inp)}
+
+		var $leftarr = []
+		var $rightarr = []
+		function checkleft(val){
+			$leftarr.push(val)
+			$('#left_internal').val(val);
+			$('.checkAll').each(function(){this.checked = false;})
+			check_chkAll()
+		}
+		function checkright(val){
+			$rightarr.push(val)
+			$('#right_internal').val(val);
+			$('.checkAll').each(function(){this.checked = false;})
+			check_chkAll()
+		}
+
+		function check_chkAll(){
+			leftval = $leftarr[$leftarr.length-1];
+			rightval = $rightarr[$rightarr.length-1];
+			$('.checkAll').each(function(){
+				splitval = $(this).val().split(',')
+				if (splitval[0].includes(leftval) == true && splitval[1].includes(rightval) == true){
+					this.checked = true;
+				}else{
+					this.checked = false;
+				}
+			})
+		}
+
+		function intImgSrc(val){
+			src = $(val).attr('value');
+			window.location = 'skp:internal-preview@'+src;
+		}
+	</script>
+
+	<style>
+		body {background: #2e2e2e; color: white;}
+		.bright {border-right: 1px solid grey;text-align:center;}
+		.bgrid {border: 1px solid grey; margin: 0px -5px 0px -14px !important;height: 60px;}
+		.brow {border: 1px solid grey;padding: 0px !important;margin-bottom: 1em;}
+		.sel-int {border-top: 1px solid grey;margin-left:-1em;margin-right:-1em;padding:10px;text-align: center;}
+		#placeint {font-family: 'Poppins', sans-serif; font-weight: normal;}
+
+		.container {position: relative; width: 100%;}
+		img {opacity: 1;display: block;width: 100%;transition: .5s ease;backface-visibility: hidden;height: 130px;border-radius: 10px;margin: 5px 0px 2px 0px;}
+		.middle {transition: .5s ease;opacity: 0;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);text-align: center;}
+		.container:hover img {opacity: 0.3;}
+		.container:hover .middle {opacity: 1;}
+		.text {color: white;font-size: 18px;padding: 8px 8px;cursor: pointer;}
+	</style>
+</head>
+
+<body>
+	<div class="ui container-fluid">
+		<div class="ui four column grid bgrid">
+			<div class="column bright">Category</div>
+			<div class="column bright">LHS<br>(Left Hand Side)</div>
+			<div class="column bright">RHS<br>(Right Hand Side)</div>
+			<div class="column" style="text-align: center;">Action</div>
+		</div>
+
+		<input type="hidden" id="left_internal">
+		<input type="hidden" id="right_internal">
+		<div class="ui four column grid" id="place_int_img" style="height:450px; overflow-x: scroll;margin-top: 1em;"></div>
+	</div>
+
+	<div class="ui equal width form" style="margin-top: 1.5em;text-align:center;">
+		<div class="column">
+			<div class="tiny ui animated fade inverted green button" id="placeint">
+				<div class="visible content">Add Internal</div>
+				<div class="hidden content"><i class="plus icon"></i></i></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

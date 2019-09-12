@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" />
+	<script type="text/javascript" src="../js/semantic.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/toastr.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/toastr.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+
+	<script>
+		$(document).ready(function(){
+			$('#load').css('display', 'block');
+			setTimeout(function() {window.location = 'skp:load_carimg@'+ 1;}, 100);
+
+			$('#placecar').click(function(){
+				checked_car = $('#selected-car').val();
+				if (checked_car.length != 0){
+					window.location = 'skp:load_detail@' + checked_car;
+				}else{
+					toastr.error('Please select any Carcass to Add', 'Error');
+					return false
+				}
+			})
+		});
+
+		function passCarImage(input){
+			$('#load').css('display', 'none');
+			$('#load_car_img').html(input)
+		}
+
+		function checkCar(val){$('#selected-car').val(val);}
+		function getCarImg(val){
+			window.location = 'skp:pre_carimage@' + $(val).attr('value');
+		}
+	</script>
+	<style>
+		body {background-color: #1b1b1b; color: white;}
+		.ui.grid{margin: 0px;}
+		.ui.grid>.row>.column {text-align: center; padding: inherit; border: 1px solid grey;padding-left: 0px; padding-right: 0px;}
+		.ui.grid>.row {padding-bottom: 5px !important;}
+		.carimage {padding-top: inherit;text-align: -webkit-center;}
+		.carimage img:hover{cursor: pointer;}
+		.carname {border-bottom: 1px solid grey;overflow-wrap: break-word;margin-top: -10px;text-align: -webkit-center;margin-left: -1rem;margin-right: -1rem;}
+		.carname span {padding: 5px 0px 0px 5px;}
+		.mini {font-family: 'Poppins', sans-serif !important; font-weight: normal !important;}
+		.carimage img {border-radius: 5px;}
+		.sel-carcass {line-height:35px; border-top:1px solid grey; margin-left:-14px; margin-right:-14px; text-align:center;}
+		#placecar {font-family: 'Poppins', sans-serif; font-weight: normal;}
+
+		.container {position: relative; width: 100%;}
+		img {opacity: 1;display: block;width: 161px;transition: .5s ease;backface-visibility: hidden;height: 130px;border-radius: 10px;margin: 5px 0px 2px 0px;}
+		.middle {transition: .5s ease;opacity: 0;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);text-align: center;}
+		.container:hover img {opacity: 0.3;}
+		.container:hover .middle {opacity: 1;}
+		.text {color: white;font-size: 18px;padding: 8px 8px;cursor: pointer;}
+	</style>
+</head>
+<body>
+	<div class="ui active dimmer" id="load" style="display: none;">
+    <div class="ui text loader" style="font-size: 13px !important;">Getting Carcasses...<br>Please wait a few minutes</div>
+  </div>
+	<div class="ui container-fluid">
+		<input type="hidden" id="selected-car" value="">
+		<div id="load_car_img" style="height: 500px;overflow-x: scroll;margin-top:1em;"></div>
+
+		<div class="ui equal width form" style="margin-top:7px;text-align:center;">
+			<div class="column">
+				<div class="tiny ui animated fade inverted green button" id="placecar">
+					<div class="visible content">Add Carcass</div>
+					<div class="hidden content"><i class="plus icon"></i></i></div>
+				</div>
+				<!-- <button class="tiny ui inverted green button" id="placecar">Update Carcass</button> -->
+			</div>
+		</div>
+	</div>
+</body>
+</html>

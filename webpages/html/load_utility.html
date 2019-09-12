@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		p {font-weight: normal;margin-top: 1em;}
+		button {font-family: 'Poppins', sans-serif !important; font-weight: normal !important;}
+		.bgrid {border: 1px solid grey; margin: 0px -5px 0px -14px !important;height: 120px;}
+		.bright {border-right: 1px solid grey;}
+		.tc	{text-align: center;padding: 15px 5px 0px 5px !important;}
+		.tc p {font-size: 12px;}
+	</style>
+
+	<script>
+		$(document).ready(function(){
+			$('#rotate-comp').on('click', function(){
+				window.location = 'skp:rotate-comp@'+1;
+			});
+			$('#view-comp').on('click', function(){
+				window.location = 'skp:view_room_comp@'+'view-comp';
+			});
+			$('#scan-comp').on('click', function(){
+				window.location = 'skp:view_room_comp@'+'scan-comp';
+			});
+			$('#multi-lam').click(function(){
+				window.location = 'skp:multi_laminate@'+1;
+			});
+			$('#delete-room').click(function(){
+				window.location = 'skp:delete_room@'+1;
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="ui container">
+		<div class="ui equal width grid bgrid">
+			<div class="column bright tc">
+				<button class="mini ui inverted brown button" id="rotate-comp">&emsp;Rotate&emsp;Component</button>
+				<p>Rotate component along Z axis.</p>
+			</div>
+			<div class="column bright tc">
+				<button class="mini ui inverted brown button" id="view-comp">View Room Components</button>
+				<p>Click this to select all the room components.</p>
+			</div>
+			<div class="column tc">
+				<button class="mini ui inverted brown button" id="scan-comp">Align Room Components</button>
+				<p>Click this button to align the Rio Components.</p>
+			</div>
+		</div><br>
+
+		<div class="ui equal width grid bgrid">
+			<div class="column tc bright">
+				<button class="mini ui inverted brown button" id="multi-lam">Multi Laminations</button>
+				<p>Apply laminations for multiple components.</p>
+			</div>
+			<div class="column tc">
+				<button class="mini ui inverted brown button" id="delete-room">Delete Room</button>
+				<p>Click to Delete Room.</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

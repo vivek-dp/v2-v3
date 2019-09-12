@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" />
+	<script type="text/javascript" src="../js/semantic.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/load_multi_lam.js"></script>
+	<script type="text/javascript" src="../js/jscolor.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+
+	<style>
+		#multi-place-img {overflow-y: scroll;height: 370px;padding-bottom: 2em;margin-top: 5px;}
+		img {width: 80px; height: 120px;}
+		img:hover{transform: scale(1.5);transition: all .5s ease-out;cursor: pointer;}
+		.ui.segment {background: transparent;color: #ccc;}
+		.ui.grid>.row {padding-top: 0px; padding-bottom: 0px;}
+		.ui.segment {padding: 0px;}
+		.ui.grid>.column:not(.row) {text-align: center;}
+		.ui.grid {margin: 0px;}
+		.cbtn{
+			background-image: linear-gradient(to bottom right, red, yellow) !important;
+			color: white !important;
+			font-family: 'Poppins', sans-serif !important;
+			font-weight: normal !important;
+		}
+		#search_val::-webkit-input-placeholder {
+		  font-style: italic;
+		}
+		.lam_name {height: 30%}
+		.lam_img img {border:1px solid grey; border-radius: 7%;}
+		.col-head {height: 25px;}
+	</style>
+</head>
+
+<body>
+	<div class="ui container">
+		<div class="ui equal width center aligned padded grid" style="margin-top: 1em;">
+			<div class="column">
+				<div class="ui form">
+					<div class="field">
+						<div class="ui buttons" style="width: 75%">
+						  <button class="ui button btnactive" id="clkmat">Material Code</button>
+						  <div class="or"></div>
+						  <button class="ui button" id="clkcol">Color Picker</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" id="material_type" value="material">
+
+		<div class="ui equal width center aligned padded grid">
+			<div class="column">
+				<div id="multi_lam_block" style="margin-top:2%;margin-left: 5%;margin-right: 5%;"></div>
+			</div>
+
+			<div class="column" id="multi_col_block" style="display: none; width: 100%;">
+				<div class="ui equal width grid">
+					<div class="column">
+						<div class="col-head"><input type="hidden" id="valueInput" value="FFFFFF"></div>
+						<button class="fluid ui button jscolor {valueElement:'valueInput', styleElement:'styleInput', closable:true,closeText:'Close'}">Click here to pick a color</button>
+					</div>
+					<div class="column">
+						<div class="col-head">Color Preview</div>
+						<div id="styleInput" style="width:100%; height:150px;background: white;"></div>
+					</div>
+				</div>
+
+				<div class="ui grid">
+					<div class="row" style="margin-top: 1em;border-top: 1px solid grey;">
+						<div class="sixteen wide column" style="text-align: center;margin-top: 8em;">
+							<div class="ui form">
+								<div class="field">
+									<button class="small ui inverted green button" id="multi_color">Update</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="ui segment" id="multi_lam_types" style="display: none;border:2px solid darkslategrey;">
+			<div class="ui equal width padded grid">
+				<div class="row" style="border-bottom: 2px solid darkslategrey; padding-bottom: 1%;">
+			    <div class="column"><h4 style="padding-top: 10px;">Lamination Codes</h4></div>
+			    <div class="column">
+			    	<div class="ui form">
+			    		<div class="field">
+			    			<div class="ui icon input">
+					      	<input type="text" id="multi_search_val" placeholder="Search..."><i class="search icon" style="color: #ccc;"></i>
+					      </div>
+			    		</div>
+			    	</div>
+			    </div>
+			  </div>
+			</div>
+			<div id="multi-place-img"></div>
+		</div>
+	</div>
+</body>
+</html>
