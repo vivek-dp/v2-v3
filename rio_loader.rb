@@ -12,6 +12,8 @@ SKP_FILE_TYPE = ".skp"
 SKETCHUP_CONSOLE.show
 #require 'rubygems'
 
+V2_V3_CONVERSION_FLAG=true
+
 puts "Checking Gem files"
 
 begin
@@ -36,6 +38,15 @@ begin
 	require "aws-sdk"
 rescue LoadError
 	Gem::install "aws-sdk"
+end
+
+def rioload_ruby path
+    ruby_file_name = path + '.rb'
+    file_name = File.join(RIO_ROOT_PATH, ruby_file_name)
+    puts file_name
+    if File.exists?(file_name)
+        return Sketchup.load file_name
+    end
 end
 
 
@@ -102,43 +113,43 @@ module Decor_Standards
 	DP::create_layers
 	
 	
-	class MyEntitiesObserver < Sketchup::EntitiesObserver
-		def onElementAdded(entities, entity)
-			if entity.is_a?(Sketchup::ComponentInstance) && !entity.deleted?
-				dict = nil
-				if entity.definition.attribute_dictionaries
-					dict = entity.definition.attribute_dictionaries['rio_atts']
-				elsif entity.attribute_dictionaries
-					dict = entity.attribute_dictionaries['rio_atts']
-				end
-				#puts "dict : #{dict}"
+	# class MyEntitiesObserver < Sketchup::EntitiesObserver
+	# 	def onElementAdded(entities, entity)
+	# 		if entity.is_a?(Sketchup::ComponentInstance) && !entity.deleted?
+	# 			dict = nil
+	# 			if entity.definition.attribute_dictionaries
+	# 				dict = entity.definition.attribute_dictionaries['rio_atts']
+	# 			elsif entity.attribute_dictionaries
+	# 				dict = entity.attribute_dictionaries['rio_atts']
+	# 			end
+	# 			#puts "dict : #{dict}"
 				
-				if dict
-					entity.layer = 'DP_Comp_layer'
-					entity.set_attribute :rio_atts, 'rio_comp', true
-					space_name = entity.definition.get_attribute(:rio_atts, 'space_name', space_name)
-					entity.set_attribute :rio_atts, 'space_name', space_name
-					puts "Rio Component Added"
+	# 			if dict
+	# 				entity.layer = 'DP_Comp_layer'
+	# 				entity.set_attribute :rio_atts, 'rio_comp', true
+	# 				space_name = entity.definition.get_attribute(:rio_atts, 'space_name', space_name)
+	# 				entity.set_attribute :rio_atts, 'space_name', space_name
+	# 				puts "Rio Component Added"
 
-						dict_name='carcase_spec'
-						defn   = entity.definition.get_attribute(dict_name, 'attr_product_code')
-						entity.set_attribute(dict_name, 'attr_product_code', defn) 
+	# 					dict_name='carcase_spec'
+	# 					defn   = entity.definition.get_attribute(dict_name, 'attr_product_code')
+	# 					entity.set_attribute(dict_name, 'attr_product_code', defn) 
 
-						dictionaries = ['carcass_spec', 'rio_atts']
-						entity.definition.attribute_dictionaries.each{|dict|
-							next if !dictionaries.include?(dict.name)
-							dict.each_pair {|key,val| 
-								entity.set_attribute dict.name, key, val 
-							}
-						}
+	# 					dictionaries = ['carcass_spec', 'rio_atts']
+	# 					entity.definition.attribute_dictionaries.each{|dict|
+	# 						next if !dictionaries.include?(dict.name)
+	# 						dict.each_pair {|key,val| 
+	# 							entity.set_attribute dict.name, key, val 
+	# 						}
+	# 					}
 
 					
-					#DP::update_all_room_components
-					# DP::update_entity_bounds entity
-				end
-			end
-		end
-	end
+	# 				#DP::update_all_room_components
+	# 				# DP::update_entity_bounds entity
+	# 			end
+	# 		end
+	# 	end
+	# end
 
 	class MyEntityObserver < Sketchup::EntityObserver
 		def onChangeEntity(entity)
@@ -157,8 +168,8 @@ module Decor_Standards
 	 
 	#Attach the observer
 	puts "Attaching observer"
-	observer = MyEntitiesObserver.new
-	Sketchup.active_model.entities.add_observer(observer)
+	#observer = MyEntitiesObserver.new
+	#Sketchup.active_model.entities.add_observer(observer)
 
 
 	chris_defn = Sketchup.active_model.definitions['Chris']

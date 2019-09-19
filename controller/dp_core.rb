@@ -1,5 +1,7 @@
 require_relative 'tt_bounds.rb'
 require_relative 'tt_core.rb'
+require_relative '../core/CivilHelper.rb'
+
 #-----------------------------------------------
 #
 #Decorpot Sketchup Core library
@@ -2539,6 +2541,9 @@ module DP
 	end
 
 	def self.get_space_names
+		if V2_V3_CONVERSION_FLAG
+			return RIO::CivilHelper::get_room_names
+		end
 		spaces = Sketchup.active_model.entities.grep(Sketchup::Group).select{|gp| (gp.get_attribute :rio_atts, 'space_name') != nil}
 		space_names = []
 		spaces.each{|space| space_names << space.get_attribute(:rio_atts, 'space_name')}

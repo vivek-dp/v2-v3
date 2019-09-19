@@ -299,15 +299,20 @@ module Decor_Standards
 				layer = Sketchup.active_model.layers[layer_name]
 				layer.name=layer_name if layer
 			}
+			['RIO_Wall', 'RIO_Door', 'RIO_Window'].each {|layer_name|
+				layer = Sketchup.active_model.layers[layer_name]
+				layer.name=layer_name if layer
+			}
 			edges = Sketchup.active_model.selection.select{|ent| ent.is_a?(Sketchup::Edge)}
+			wall_layer_name = V2_V3_CONVERSION_FLAG ? 'RIO_Wall' : 'Wall'
 			if edges.count != 0
 				edges.each {|edg|
-					edg.layer = Sketchup.active_model.layers['Wall']
+					edg.layer = Sketchup.active_model.layers[wall_layer_name]
 				}
-				alval.push('Wall')
+				alval.push(wall_layer_name)
 				alval.push(1)
 			else
-				alval.push('Wall')
+				alval.push(wall_layer_name)
 				alval.push(0)
 			end
 			jswall = "spaceAlert("+alval.to_s+")"
@@ -321,15 +326,20 @@ module Decor_Standards
 				layer = Sketchup.active_model.layers[layer_name]
 				layer.name=layer_name if layer
 			}
+			['RIO_Wall', 'RIO_Door', 'RIO_Window'].each {|layer_name|
+				layer = Sketchup.active_model.layers[layer_name]
+				layer.name=layer_name if layer
+			}
 			edges = Sketchup.active_model.selection.select{|ent| ent.is_a?(Sketchup::Edge)}
+			door_layer_name = V2_V3_CONVERSION_FLAG ? 'RIO_Door' : 'Door'
 			if edges.count != 0
 				edges.each {|edg|
-					edg.layer = Sketchup.active_model.layers['Door']
+					edg.layer = Sketchup.active_model.layers[door_layer_name]
 				}
-				alval.push('Door')
+				alval.push(door_layer_name)
 				alval.push(1)
 			else
-				alval.push('Door')
+				alval.push(door_layer_name)
 				alval.push(0)
 			end
 			jsdoor = "spaceAlert("+alval.to_s+")"
@@ -343,15 +353,20 @@ module Decor_Standards
 				layer = Sketchup.active_model.layers[layer_name]
 				layer.name=layer_name if layer
 			}
+			['RIO_Wall', 'RIO_Door', 'RIO_Window'].each {|layer_name|
+				layer = Sketchup.active_model.layers[layer_name]
+				layer.name=layer_name if layer
+			}
 			edges = Sketchup.active_model.selection.select{|ent| ent.is_a?(Sketchup::Edge)}
+			window_layer_name = V2_V3_CONVERSION_FLAG ? 'RIO_Window' : 'Window'
 			if edges.count != 0
 				edges.each {|edg|
-					edg.layer = Sketchup.active_model.layers['Window']
+					edg.layer = Sketchup.active_model.layers[window_layer_name]
 				}
-				alval.push('Window')
+				alval.push(window_layer_name)
 				alval.push(1)
 			else
-				alval.push('Window')
+				alval.push(window_layer_name)
 				alval.push(0)
 			end
 			jswin = "spaceAlert("+alval.to_s+")"
@@ -360,6 +375,10 @@ module Decor_Standards
 
 		$rio_dialog.add_action_callback("method_addroom"){|dialog, params|
 			['Wall', 'Door', 'Window'].each {|layer_name|
+				layer = Sketchup.active_model.layers[layer_name]
+				layer.name=layer_name if layer
+			}
+			['RIO_Wall', 'RIO_Door', 'RIO_Window'].each {|layer_name|
 				layer = Sketchup.active_model.layers[layer_name]
 				layer.name=layer_name if layer
 			}
@@ -892,8 +911,14 @@ module Decor_Standards
 			defaults = [DP::get_space_names.first]
 			if DP::get_space_names.length.to_i !=0
 				inputs = UI.inputbox(prompts,defaults, list, "Select Room Name")
-				if !inputs[0].nil?
-					delete_room = DP::delete_room inputs[0]
+				room_name = inputs[0]
+				puts "Deleting Room : #{room_name}"
+				if !room_name.nil?
+					if V2_V3_CONVERSION_FLAG
+						delete_room = RIO::CivilHelper::remove_room_entities room_name
+					else
+						delete_room = DP::delete_room room_name
+					end
 				end
 			else
 				UI::messagebox 'Not found rooms!', MB_OK

@@ -530,7 +530,7 @@ module Decor_Standards
 					inst.transform!(trans)
 				end
 			end
-			if inst
+			if inst && !V2_V3_CONVERSION_FLAG
 				wall_overlap_flag 	= DP::check_wall_overlap(inst, space_name)
 				comp_over_flag 		= DP::check_comp_overlap(inst, space_name)
 				comp_floor_overlap 	= DP::check_comp_floor_overlap(inst, space_name)

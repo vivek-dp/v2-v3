@@ -1,6 +1,7 @@
 require 'singleton'
 require_relative 'multi_room_preprocess.rb'
 require_relative 'multi_room_door.rb'
+require_relative '../tools/UIInterface.rb'
 
 class RoomTool
 	include Singleton	
@@ -89,6 +90,7 @@ class RoomTool
 			space_dialog.close
 			inputs = JSON.parse(param)
 			# p inputs
+			puts "Room inputs V2 : #{inputs}"
 			if inputs
 				space_names = DP::get_space_names
 				MRD::add_wall_faces
@@ -104,7 +106,18 @@ class RoomTool
 					wall_color 	= get_color
 					#MRP::raise_walls face, inputs, wall_color
 					res_face = MRD::get_face_views face, inputs, wall_color
-					DP::add_spacetype inputs, res_face
+					if V2_V3_CONVERSION_FLAG
+						 converted_inputs = [
+							inputs['space_name'],
+							inputs['wall_height'],
+							inputs['door_height'],
+							inputs['window_height'],
+							inputs['window_offset']
+						]
+						RIO::Tools::UITools.instance.create_room converted_inputs
+					else
+						DP::add_spacetype inputs, res_face
+					end
 					@count += 1
 				end
 				# space_arr 	= DP::get_space_names
