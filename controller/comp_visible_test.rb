@@ -127,6 +127,12 @@ def scan_room_components room_name, correction_flag=false
 	zvector		= Geom::Vector3d.new(0, 0, 1)
 	
 	floor_gp 		= Sketchup.active_model.entities.select{|ent| ent.layer.name == 'DP_Floor_'+room_name.to_s}[0]
+
+	if V2_V3_CONVERSION_FLAG
+		floor_gp = Sketchup.active_model.entities.select{|ent| ent.layer.name == 'RIO_Floor_'+room_name.to_s}[0]
+		room_comps 	= Sketchup.active_model.entities.select{|comp| !comp.get_attribute(:rio_comp_atts, 'rio_comp').nil?}
+		room_walls = Sketchup.active_model.entities.select{|ent| ent.get_attribute(:rio_comp_atts, 'room_name')==room_name.to_s}
+	end
 	floor_origin 	= floor_gp.transformation.origin
 
 	wall_height 	= floor_gp.get_attribute(:rio_atts, 'wall_height').to_i.mm
@@ -137,6 +143,7 @@ def scan_room_components room_name, correction_flag=false
 		puts "No Component to scan in room #{room_name}"
 		return false
 	elsif floor_face.nil?
+		puts "Floor face not found"
 		return false
 	elsif room_walls.empty?
 		puts "No walls in the room"

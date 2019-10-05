@@ -379,6 +379,10 @@ module MRP
 		ents 		= Sketchup.active_model.entities
 		room_ents 	= ents.grep(Sketchup::ComponentInstance).select{|ent| ent.get_attribute(:rio_atts, 'space_name') == room_name}
 		room_ents << ents.grep(Sketchup::Group).select{|ent| ent.get_attribute(:rio_atts, 'space_name') == room_name && !ent.get_attribute(:rio_atts, 'custom_type').nil?}
+		if V2_V3_CONVERSION_FLAG
+			room_ents 	= ents.grep(Sketchup::ComponentInstance).select{|ent| ent.get_attribute(:rio_comp_atts, 'room_name') == room_name}
+			room_ents << ents.grep(Sketchup::Group).select{|ent| ent.get_attribute(:rio_comp_atts, 'room_name') == room_name && !ent.get_attribute(:rio_comp_atts, 'custom_type').nil?}
+		end
 		room_ents.flatten!
 		room_ents
 	end
@@ -394,6 +398,9 @@ module MRP
 	
 	def self.get_room_face room_name
 		gp = Sketchup.active_model.entities.select{|ent| ent.layer.name == 'DP_Floor_'+room_name.to_s}[0]
+		if V2_V3_CONVERSION_FLAG
+			gp = Sketchup.active_model.entities.select{|ent| ent.layer.name == 'RIO_Floor_'+room_name.to_s}[0]
+		end
 		if gp.nil?
 			puts "Floor group not found"
 			return nil
@@ -916,6 +923,14 @@ module MRP
 		view_h
 	end
 
+	def self.MVP_get_room_view_components room_name 
+		room_comps 	= MRP::get_room_components room_name
+		room_walls = Sketchup.active_model.entities.select{|ent| ent.get_attribute(:rio_comp_atts, 'room_name')==room_name.to_s}
+
+		view_count 	= 0
+		view_h		= {}
+	end
+	
 	#MRP::get_working_drawing_sides 'Room#1'
 	def self.get_working_drawing_sides room_name='Bedroom', scan_flag=false
 

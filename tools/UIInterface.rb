@@ -10,15 +10,15 @@ module RIO
 			@@rio_dialog = nil
 			
 			def initialize
-				@dialog_width 	= 400
-				@dialog_height 	= 650
-				@dialog_url 		= RIOV3_ROOT_PATH + 'tools/tools_main.html'
-				@style_window 	= UI::HtmlDialog::STYLE_WINDOW
-				@style_dialog 	= UI::HtmlDialog::STYLE_DIALOG
+				# @dialog_width 	= 400
+				# @dialog_height 	= 650
+				# @dialog_url 		= RIOV3_ROOT_PATH + 'tools/tools_main.html'
+				# @style_window 	= UI::HtmlDialog::STYLE_WINDOW
+				# @style_dialog 	= UI::HtmlDialog::STYLE_DIALOG
 			end
 
 			def get_dialog
-				@@rio_dimalog
+				@@rio_dialog
 			end
 			
 			def get_params_from_string param_str
@@ -211,7 +211,7 @@ module RIO
 	end #module Tools
 
 	def self.get_wall_location
-		dialog_url 		= RIOV3_ROOT_PATH + 'tools/wall_location.html' 
+		dialog_url 		= RIO_ROOT_PATH + '/tools/wall_location.html' 
 		dialog_inputs_h = { :title		=>'Enter wall location',
 							:scrollable	=>false,
 							:resizable	=>false,
@@ -248,8 +248,8 @@ module RIO
 			wall_vector = start_pt.vector_to(end_pt)
 			
 			wall_offset_point = RIO::CivilHelper::get_comp_location wall_selected, from_wall, from_floor , wall_side
+			
 			active_model = Sketchup.active_model
-
 			active_model.set_attribute :rio_atts, 'room_name', wall_selected.get_attribute(:rio_block_atts, 'room_name')
 			active_model.set_attribute :rio_atts, 'wall_offset_pt', wall_offset_point
 			active_model.set_attribute :rio_atts, 'movement_vector', towards_wall_v
@@ -264,14 +264,14 @@ module RIO
 			
 			puts "The start point is : #{from_wall} : #{from_floor} : #{wall_offset_point}"
 			
-			if true #only for the civil 
-				carcass_path 	= File.join(RIOV3_ROOT_PATH, 'assets/BC_800.skp')
-				defn 			= Sketchup.active_model.definitions.load(carcass_path)
+			# if true #only for the civil 
+			# 	carcass_path 	= File.join(RIO_ROOT_PATH, 'assets/BC_800.skp')
+			# 	defn 			= Sketchup.active_model.definitions.load(carcass_path)
 				
-				RIO::CivilHelper::place_component defn, 'wall'
-			end
+			# 	RIO::CivilHelper::place_component defn, 'wall'
+			# end
 		}
-		wall_location_dialog.set_url(dialog_url);
+		wall_location_dialog.set_file(dialog_url);
 		wall_location_dialog.show();
 	end
 	

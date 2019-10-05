@@ -16,29 +16,29 @@ V2_V3_CONVERSION_FLAG=true
 
 puts "Checking Gem files"
 
-begin
-	require "mysql"
-rescue LoadError
-	puts "mysql not found"
-	Gem::install 'ruby-mysql'
-end
+# begin
+	# require "mysql"
+# rescue LoadError
+	# puts "mysql not found"
+	# Gem::install 'ruby-mysql'
+# end
 
-begin
-	require "sqlite3"
-rescue LoadError
-	puts "sqlite not found"
-	begin
-		Gem::install "sqlite3"
-	rescue
-		puts "install error"
-	end
-end
+# begin
+	# require "sqlite3"
+# rescue LoadError
+	# puts "sqlite not found"
+	# begin
+		# Gem::install "sqlite3"
+	# rescue
+		# puts "install error"
+	# end
+# end
 
-begin
-	require "aws-sdk"
-rescue LoadError
-	Gem::install "aws-sdk"
-end
+# begin
+	# require "aws-sdk"
+# rescue  
+	# Gem::install "aws-sdk"
+# end
 
 def rioload_ruby path
     ruby_file_name = path + '.rb'
@@ -75,9 +75,9 @@ module Decor_Standards
 		# Sketchup.active_model.set_attribute(:rio_settings, key, val)
 	# }
 
-	puts "Loading files"
+	puts "Loading files++"
 	
-	path 			= File.dirname(__FILE__)
+	path 					= File.dirname(__FILE__)
 	cont_path 		= File.join(path, 'controller')
 	ext_lib_path 	= File.join(path, 'external_libs')
 	

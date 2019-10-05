@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head runat="server">
+		<title></title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+
+
+		<!--Custom components
+		-Color palette-->
+		<link rel="stylesheet" href="colorPick.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+		
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+		<script src="colorpalettepicker.js"></script>		   
+		<script type="text/javascript" src="js/tools.js"></script>
+	</head>
+	<body>
+    <table width="100%">
+
+      <td id="details_page">  
+          <h2 class="ui center aligned icon header">
+            <i class="circular building icon"></i>
+            Room Creation
+          </h2>
+          <div class="ui inverted segment">
+            <div id="room_form" class="ui inverted form">
+              <div class="field">
+                <label>Room Name</label>
+                <input type="text" value="MBR" placeholder="Kitchen, MBR, etc" id="CR_room_name">
+              </div>
+              <div class="field">
+                <label>Wall Height</label>
+                <input type="number" value="3200" placeholder="Please enter in mm... Without preceding mm." id="CR_wall_height">
+              </div>
+              <div class="field">
+                <label>Door Height</label>
+                <input type="number" value="1900" placeholder="Please enter in mm. Without preceding mm." id="CR_door_height">
+              </div>
+              <div class="field">
+                <label>Window Height</label>
+                <input type="number" value="550" placeholder="Please enter in mm. Without preceding mm." id="CR_window_height">
+              </div>
+              <div class="field">
+                <label>Window Offset</label>
+                <input type="number" value="970" placeholder="Please enter in mm. Without preceding mm." id="CR_window_offset">
+              </div>
+              <div class="field">
+                <!--<span style:"display:inline;width:10%" id="colorpalettediv">
+                </span>-->
+                <span style:"display:inline;width:50%">      
+                  <button class="ui green button" type="submit" onclick="jsCreateRoom()">Create Room</button>
+                </span>
+				        <span style:"display:inline;width:50%">      
+                  <button class="ui red button" type="submit" onclick="jsDeleteRoomComponents()">Delete Room</button>
+                </span>
+              </div>
+            </div>
+          </div>
+      </td>
+    </table>
+
+    
+    <script type="text/javascript">
+        $( window ).on( "load", function() {
+            console.log( "window loaded" );
+            updateRoomNames();
+        });
+        // $('#colorpalettediv').colorPalettePicker({
+        //     lines:4,
+        //     onSelected: function(color){
+        //         console.log(color);
+        //     }
+        // });
+    </script>
+	</body>
+</html>

@@ -10,6 +10,13 @@ module Decor_Standards
 	end
 	
 	def self.load_login
+		if V2_V3_CONVERSION_FLAG
+			$rio_logged_in = true
+			set_mm_template
+			self.decor_index()
+			return
+		end
+
 		dialog = UI::HtmlDialog.new({:dialog_title=>"RioSTD | Login", :preferences_key=>"com.sample.plugin", :scrollable=>false, :resizable=>false, :style=>UI::HtmlDialog::STYLE_DIALOG})
 		html_path = File.join(WEBDIALOG_PATH, 'load_login.html')
 		dialog.set_file(html_path)

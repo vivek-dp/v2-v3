@@ -1803,7 +1803,13 @@ module DP
 		#comps 					= comps - room_comp
 	
 		adj_comps	= DP::find_adjacent_comps comps-[comp], comp;
-		room_name 	= comp.get_attribute :rio_atts, 'space_name'
+		dict_name = V2_V3_CONVERSION_FLAG == true ? :rio_atts : :rio_block_atts
+		if V2_V3_CONVERSION_FLAG
+			room_name 	= comp.get_attribute dict_name, 'room_name'
+		else
+			room_name 	= comp.get_attribute dict_name, 'space_name'
+		end
+		puts "room_name : #{room_name}"
 		walls 		= get_walls room_name
 		walls.each{ |wall|
 			xn 		= comp.bounds.intersect wall.bounds

@@ -2,19 +2,16 @@ rioload_ruby '/core/SketchupHelper'
 rioload_ruby '/core/DirectionHelper'
 module RIO
     module CivilHelper
-		def self.get_room_names
+		def self.get_room_names                                                                                   
 			room_names = []
 			ents = Sketchup.active_model.entities
-			ents.grep(Sketchup::Face).each{|sface|
-				rname = sface.get_attribute(:rio_atts, 'room_name')
+			ents.grep(Sketchup::Group).each{|group|
+				rname = group.get_attribute(:rio_atts, 'room_name')
 				room_names<<rname if rname
 			}
 			room_names.flatten!
 			room_names.uniq!
 			room_names
-			
-            # room_names = [ "room_name1", "room_name22", "room_name33", "room_name444",]
-            # room_names
 		end
 		
         def self.add_wall_corner_lines
@@ -1231,6 +1228,9 @@ module RIO
 
         #Check if the component is properly placed
         def self.check_component_placement comp_inst, room_name
+
+            return true
+            
             args = method(__method__).parameters.map { |arg| arg[1].to_s }
             puts args.map { |arg| "#{arg} = #{eval arg}" }.join(', ')
 
@@ -1324,14 +1324,17 @@ module RIO
         end
         
         #Input a fully created component and location
-        def self.place_component comp_defn, placement_type='manual', placement_location=nil
+        def self.place_component comp_defn, 
+            placement_type='manual', 
+            placement_location=nil
+            
             if comp_defn.nil?
                 puts "Component definition is mandatory"
             end
 
             case placement_type
             when 'manual'
-                comp_inst = Sketchup.active_model.entities.place_component comp_defn
+                comp_inst = Sketchup.active_model.place_component comp_defn
             when 'wall'
                 model               = Sketchup.active_model
                 wall_offset_point   = model.get_attribute(:rio_atts, 'wall_offset_pt')
@@ -1456,11 +1459,12 @@ module RIO
                 return false
             end
 
-            room_face = get_room_face(room_name)
-            unless room_face||room_face.is_a?(Sketchup::Face)
-                puts "Room face not found"
-                return false
-            end
+            #Floor check should be done here
+            # room_face = get_room_face(room_name)
+            # unless room_face||room_face.is_a?(Sketchup::Face)
+            #     puts "Room face not found"
+            #     return false
+            # end
 
             room_entities_a = get_view_entities room_name
             view_entities   = room_entities_a[view_name]

@@ -964,6 +964,7 @@ module WorkingDrawing
 	end
 	
 	def self.export_working_drawing
+		puts "export_working_drawing : -------"
 		adj_comps = scan_components
 		if !adj_comps.empty?
 			Sketchup.active_model.selection.clear

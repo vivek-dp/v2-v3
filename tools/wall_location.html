@@ -1,0 +1,82 @@
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" />
+	
+		
+		
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+		
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+		<script type="text/javascript" src="js/tools.js"></script>
+		<script>
+			$(document).ready(function(){
+				$('.ui.dropdown').dropdown();
+			
+				$('#submit-btn').click(function(){
+					distance = $('#relative_distance').val();
+					from_floor	= $('#from_floor').val();
+					relative_position = $('#relative_position').text();
+					
+					details_arr = [];
+					details_arr.push(distance);
+					details_arr.push(relative_position);
+					details_arr.push(from_floor);
+					
+					console.log(details_arr);
+					window.location = 'skp:sendWallLocation@'+details_arr;
+				});
+			});
+		</script>
+	</head>
+	<body>
+			<div class="ui container">
+			<table width="100%">
+				<td id="wall_location_page">  
+					<h2 class="ui center aligned icon header">
+						<i class="icon"><img src="wall.svg" height="200px" width="100px" /></i>
+							Select Wall Location
+					</h2>
+					<div class="ui inverted segment">
+						<div id="room_form" class="ui inverted form">
+							<div class="field">
+								<div class="ui right labeled input">
+									<input type="text" placeholder="Distance from" id="relative_distance">
+									<div class="ui dropdown label">
+										<div class="text" id="relative_position">left</div>
+										<i class="dropdown icon"></i>
+										<div class="menu">
+											<div class="item">left</div>
+											<div class="item">right</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="field">
+								<input type="text" placeholder="From the floor" id="from_floor">
+							</div>
+							<div class="field">
+								<span style:"display:inline;width:50%">      
+									<button class="ui green button" type="submit" id="submit-btn">Submit</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</td>
+			</table>
+		</div>
+		
+		
+					
+					
+					
+				
+	</body>
+</html>	
+
+
+

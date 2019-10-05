@@ -11,7 +11,9 @@ module Decor_Standards
 				rio_comp = selection.definition.get_attribute(:rio_atts, 'rio_comp')
 				rio_comp = selection.get_attribute(:rio_atts, 'rio_comp') if rio_comp.nil?
 
-				if rio_comp.nil?
+				if selection.layer.name.start_with?('RIO_Civil_Wall')
+					#menu.add_item("Add Rio Component") {self.get_wall_point}
+				elsif rio_comp.nil?
 					rbm = menu.add_submenu("Rio Tools")
 					rbm.add_item("Add to Rio Component") { DP::add_to_rio_components selection}
 				else
@@ -36,7 +38,7 @@ module Decor_Standards
 				end
 			when Sketchup::Group
         if selection.layer.name.start_with?('DP_Wall')
-          menu.add_item("Add Rio Component") {self.get_wall_point}
+          #menu.add_item("Add Rio Component") {self.get_wall_point}
         else
           rio_comp = selection.definition.get_attribute(:rio_atts, 'rio_comp')
           rio_comp = selection.get_attribute(:rio_atts, 'rio_comp') if rio_comp.nil?
@@ -708,6 +710,7 @@ module Decor_Standards
 		$rio_dialog.add_action_callback("send_compval"){|a, b|
 			inph =	JSON.parse(b)
 			comps = Sketchup.active_model.entities.grep(Sketchup::ComponentInstance)
+			puts "inph : #{inph}"
 			self.place_component(inph)
 			js_sent = "document.getElementById('loadicon').style.display='none';"
 			$rio_dialog.execute_script(js_sent)

@@ -333,285 +333,210 @@ module Decor_Standards
 		Sketchup.active_model.active_layer = 'DP_Comp_layer'
 
 		inst = nil
-		if options['auto_mode'] == "true"
-			sel_comp = Sketchup.active_model.selection[0]
-			if sel_comp.nil?
-				UI.messagebox 'Component not selected for auto mode. Select component and retry or switch off auto mode.', MB_OK
-				return false
-			end 
-			if sel_comp.layer.name != 'DP_Comp_layer'
-				UI.messagebox 'Select Rio component for auto mode', MB_OK
-				return false
-			end
-			rotz = sel_comp.transformation.rotz
-			comp_origin = sel_comp.transformation.origin
-			cdef = defn
-			sel_bounds = sel_comp.bounds
-			comp = sel_comp 
+		if V2_V3_CONVERSION_FLAG
+			if options['auto_mode'] == "true"
+				sel_comp = Sketchup.active_model.selection[0]
+				if sel_comp.nil?
+					UI.messagebox 'Component not selected for auto mode. Select component and retry or switch off auto mode.', MB_OK
+					return false
+				end 
+				if sel_comp.layer.name != 'DP_Comp_layer'
+					UI.messagebox 'Select Rio component for auto mode', MB_OK
+					return false
+				end
+				rotz = sel_comp.transformation.rotz
+				comp_origin = sel_comp.transformation.origin
+				cdef = defn
+				sel_bounds = sel_comp.bounds
+				comp = sel_comp 
 
-			posn = options['auto_position']
-			case posn
-			when 'bottom_left'
-				# puts "bottom_left : #{rotz}"
-				z_depth 	= comp.bounds.depth-cdef.bounds.depth
-				y_depth     = comp.bounds.height-cdef.bounds.height
-				x_depth		= comp.bounds.width-cdef.bounds.height
-				case rotz
-				when 0
-					trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.width, comp_origin.y+y_depth, comp_origin.z])
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
-				when 90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y-cdef.bounds.width, comp_origin.z])
-					inst.transform!(trans)
-				when 180, -180
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.width, comp_origin.y-y_depth, comp_origin.z])
-					inst.transform!(trans)
-				when -90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y+cdef.bounds.width, comp_origin.z])
-					inst.transform!(trans)
-				end
-			when 'front'
-				z_depth 	= comp.bounds.depth-cdef.bounds.depth
-				y_depth     = comp.bounds.height-cdef.bounds.height
-				x_depth		= comp.bounds.width-cdef.bounds.height
-                
-                rotz.abs==180 ? corner_rotz=rotz+90 : corner_rotz=-90
-				# puts "corner_rotz : #{corner_rotz}"
-				
-				case rotz
-				when 0
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 90.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.height, comp_origin.y-cdef.bounds.width, comp_origin.z])
-					inst.transform!(trans)
-				when 90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 180.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.width, comp_origin.y+cdef.bounds.height, comp_origin.z])
-					inst.transform!(trans)
-				when 180, -180
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 270.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.height, comp_origin.y+cdef.bounds.width, comp_origin.z])
-					inst.transform!(trans)
-				when -90
-					#tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 0.degrees)
-					#inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.width, comp_origin.y-cdef.bounds.height, comp_origin.z])
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
-					#inst.transform!(trans)
-				end
-			when 'top_left'
-				z_depth 	= comp.bounds.depth-cdef.bounds.depth
-				y_depth     = comp.bounds.height-cdef.bounds.height
-				x_depth		= comp.bounds.width-cdef.bounds.height
-				case rotz
-				when 0
-					trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.width, comp_origin.y+y_depth, comp_origin.z+z_depth])
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
-				when 90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y-cdef.bounds.width, comp_origin.z+z_depth])
-					inst.transform!(trans)
-				when 180, -180
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.width, comp_origin.y-y_depth,  comp_origin.z+z_depth])
-					inst.transform!(trans)
-				when -90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y+cdef.bounds.width,  comp_origin.z+z_depth])
-					inst.transform!(trans)
-				end
-			when 'bottom_right'
-				z_depth 	= comp.bounds.depth-cdef.bounds.depth
-				y_depth     = comp.bounds.height-cdef.bounds.height
-				x_depth		= comp.bounds.width-cdef.bounds.height
-				# puts "x_depth : #{x_depth} : #{comp.bounds.width} : #{cdef.bounds.width}"
-				case rotz
-				when 0
-					trans   = Geom::Transformation.new([comp_origin.x+sel_comp.bounds.width, comp_origin.y+y_depth, comp_origin.z])
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
-				when 90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y+sel_comp.bounds.height, comp_origin.z])
-					inst.transform!(trans)
-				when 180, -180
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans = Geom::Transformation.new([comp_origin.x-sel_comp.bounds.width, comp_origin.y-y_depth, comp_origin.z])
-					inst.transform!(trans)
-				when -90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y-sel_comp.bounds.height, comp_origin.z])
-					inst.transform!(trans)
-				end
-			when 'top_right'
-				z_depth 	= comp.bounds.depth-cdef.bounds.depth
-				y_depth     = comp.bounds.height-cdef.bounds.height
-				x_depth		= comp.bounds.width-cdef.bounds.height
-				case rotz
-				when 0
-					trans   = Geom::Transformation.new([comp_origin.x+sel_comp.bounds.width, comp_origin.y+y_depth, comp_origin.z+z_depth])
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
-				when 90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y+comp.bounds.height, comp_origin.z+z_depth])
-					inst.transform!(trans)
-				when 180, -180
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans = Geom::Transformation.new([comp_origin.x-sel_comp.bounds.width, comp_origin.y-y_depth,  comp_origin.z+z_depth])
-					inst.transform!(trans)
-				when -90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y-sel_comp.bounds.height,  comp_origin.z+z_depth])
-					inst.transform!(trans)
-				end
-			when 'top'
-				z_depth 	= comp.bounds.depth-cdef.bounds.depth
-				y_depth     = comp.bounds.height-cdef.bounds.height
-				x_depth		= comp.bounds.width-cdef.bounds.height
-				# puts "comp_origin.x : #{comp_origin.x} : #{x_depth}"
-				case rotz
-				when 0
-					trans   = Geom::Transformation.new([comp_origin.x, comp_origin.y+y_depth, comp_origin.z+comp.bounds.depth])
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
-				when 90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y, comp_origin.z+comp.bounds.depth])
-					inst.transform!(trans)
-				when 180, -180
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans = Geom::Transformation.new([comp_origin.x, comp_origin.y-y_depth, comp_origin.z+comp.bounds.depth])
-					inst.transform!(trans)
-				when -90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans 	= Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y, comp_origin.z+comp.bounds.depth])
-					inst.transform!(trans)
-				end
-			when 'bottom'
-				z_depth 	= comp.bounds.depth-cdef.bounds.depth
-				y_depth     = comp.bounds.height-cdef.bounds.height
-				x_depth		= comp.bounds.width-cdef.bounds.height
-				case rotz
-				when 0
-					trans   = Geom::Transformation.new([comp_origin.x, comp_origin.y+y_depth, comp_origin.z-cdef.bounds.depth])
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
-				when 90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y, comp_origin.z-cdef.bounds.depth])
-					inst.transform!(trans)
-				when 180, -180
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans = Geom::Transformation.new([comp_origin.x, comp_origin.y-y_depth, comp_origin.z-cdef.bounds.depth])
-					inst.transform!(trans)
-				when -90
-					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
-					inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
-					trans = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y, comp_origin.z-cdef.bounds.depth])
-					inst.transform!(trans)
-				end
-			end
-			if inst && !V2_V3_CONVERSION_FLAG
-				wall_overlap_flag 	= DP::check_wall_overlap(inst, space_name)
-				comp_over_flag 		= DP::check_comp_overlap(inst, space_name)
-				comp_floor_overlap 	= DP::check_comp_floor_overlap(inst, space_name)
-				comp_ceiling_overlap 	= DP::check_comp_ceiling_overlap(inst, space_name)
-
-				# puts "wall_overlap_flag : #{wall_overlap_flag} : #{comp_over_flag}, "
-				if wall_overlap_flag
-					UI.messagebox "Component Overlaps the wall. Cannot place it."
-					Sketchup.active_model.entities.erase_entities inst
-				elsif comp_over_flag
-					UI.messagebox "Component Overlaps the selected component. Cannot place it. Removing the new instance."
-					Sketchup.active_model.entities.erase_entities inst 
-				elsif comp_floor_overlap
-					UI.messagebox "Component placement will make it go below room bounds. Cannot place it."
-					Sketchup.active_model.entities.erase_entities inst
-				elsif comp_ceiling_overlap
-					UI.messagebox "Component placement will make it go above room ceiling bounds. Cannot place it."
-					Sketchup.active_model.entities.erase_entities inst
-				else
-					Sketchup.active_model.selection.clear
-					Sketchup.active_model.selection.add(inst)
-				end
-			end
-
-			# puts "trans: #{trans}"
-		else
-			xy_point 		= Sketchup.active_model.get_attribute :rio_global, 'wall_xy_point'
-			offset_side 	= Sketchup.active_model.get_attribute :rio_global, 'wall_offset_side'
-			if xy_point
-				sel 		= Sketchup.active_model.selection[0]
-				if sel.nil?
-					pid = Sketchup.active_model.get_attribute :rio_global, 'wall_selected'
-					sel = DP::get_comp_pid pid.to_i
-				end
-				wall_trans 	= sel.get_attribute :rio_atts, 'wall_trans'
-				z_offset	= xy_point[0].to_i.mm
-				if offset_side == 'left'
-					case wall_trans.to_i.round
+				posn = options['auto_position']
+				case posn
+				when 'bottom_left'
+					# puts "bottom_left : #{rotz}"
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					case rotz
 					when 0
-						x_offset 	= sel.bounds.corner(0).x + xy_point[1].to_i.mm
-						y_offset 	= sel.bounds.corner(0).y-defn.bounds.height 
+						trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.width, comp_origin.y+y_depth, comp_origin.z])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
 					when 90
-						x_offset 	= sel.bounds.corner(1).x + defn.bounds.height
-						y_offset  	= sel.bounds.corner(1).y+xy_point[1].to_i.mm
-					when -90
-						x_offset 	= sel.bounds.corner(2).x - defn.bounds.height
-						y_offset  	= sel.bounds.corner(2).y-xy_point[1].to_i.mm
-					when 180
-						x_offset 	= sel.bounds.corner(1).x - xy_point[1].to_i.mm
-						y_offset    = sel.bounds.corner(3).y + defn.bounds.height
-					end
-				elsif offset_side == 'right'
-					wall_length = sel.get_attribute(:rio_atts, 'view_wall_length').to_i.mm
-					case wall_trans.to_i.round 
-					when 0
-						x_offset 	= sel.bounds.corner(0).x - xy_point[1].to_i.mm + wall_length - defn.bounds.width
-						y_offset 	= sel.bounds.corner(0).y - defn.bounds.height 
-					when 90
-						x_offset 	= sel.bounds.corner(1).x + defn.bounds.height 
-						y_offset 	= sel.bounds.corner(1).y + wall_length - defn.bounds.width - xy_point[1].to_i.mm
-					when -90
-						x_offset 	= sel.bounds.corner(2).x - defn.bounds.height 
-						y_offset 	= sel.bounds.corner(2).y - wall_length + defn.bounds.width + xy_point[1].to_i.mm
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y-cdef.bounds.width, comp_origin.z])
+						inst.transfor m!(trans)
 					when 180, -180
-						x_offset 	= sel.bounds.corner(3).x - wall_length + defn.bounds.width + xy_point[1].to_i.mm
-						y_offset 	= sel.bounds.corner(3).y + defn.bounds.height
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.width, comp_origin.y-y_depth, comp_origin.z])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y+cdef.bounds.width, comp_origin.z])
+						inst.transform!(trans)
+					end
+				when 'front'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+									
+									rotz.abs==180 ? corner_rotz=rotz+90 : corner_rotz=-90
+					# puts "corner_rotz : #{corner_rotz}"
+					
+					case rotz
+					when 0
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 90.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.height, comp_origin.y-cdef.bounds.width, comp_origin.z])
+						inst.transform!(trans)
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 180.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.width, comp_origin.y+cdef.bounds.height, comp_origin.z])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 270.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.height, comp_origin.y+cdef.bounds.width, comp_origin.z])
+						inst.transform!(trans)
+					when -90
+						#tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 0.degrees)
+						#inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.width, comp_origin.y-cdef.bounds.height, comp_origin.z])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+						#inst.transform!(trans)
+					end
+				when 'top_left'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					case rotz
+					when 0
+						trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.width, comp_origin.y+y_depth, comp_origin.z+z_depth])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y-cdef.bounds.width, comp_origin.z+z_depth])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.width, comp_origin.y-y_depth,  comp_origin.z+z_depth])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y+cdef.bounds.width,  comp_origin.z+z_depth])
+						inst.transform!(trans)
+					end
+				when 'bottom_right'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					# puts "x_depth : #{x_depth} : #{comp.bounds.width} : #{cdef.bounds.width}"
+					case rotz
+					when 0
+						trans   = Geom::Transformation.new([comp_origin.x+sel_comp.bounds.width, comp_origin.y+y_depth, comp_origin.z])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y+sel_comp.bounds.height, comp_origin.z])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x-sel_comp.bounds.width, comp_origin.y-y_depth, comp_origin.z])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y-sel_comp.bounds.height, comp_origin.z])
+						inst.transform!(trans)
+					end
+				when 'top_right'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					case rotz
+					when 0
+						trans   = Geom::Transformation.new([comp_origin.x+sel_comp.bounds.width, comp_origin.y+y_depth, comp_origin.z+z_depth])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y+comp.bounds.height, comp_origin.z+z_depth])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x-sel_comp.bounds.width, comp_origin.y-y_depth,  comp_origin.z+z_depth])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y-sel_comp.bounds.height,  comp_origin.z+z_depth])
+						inst.transform!(trans)
+					end
+				when 'top'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					# puts "comp_origin.x : #{comp_origin.x} : #{x_depth}"
+					case rotz
+					when 0
+						trans   = Geom::Transformation.new([comp_origin.x, comp_origin.y+y_depth, comp_origin.z+comp.bounds.depth])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y, comp_origin.z+comp.bounds.depth])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x, comp_origin.y-y_depth, comp_origin.z+comp.bounds.depth])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans 	= Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y, comp_origin.z+comp.bounds.depth])
+						inst.transform!(trans)
+					end
+				when 'bottom'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					case rotz
+					when 0
+						trans   = Geom::Transformation.new([comp_origin.x, comp_origin.y+y_depth, comp_origin.z-cdef.bounds.depth])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y, comp_origin.z-cdef.bounds.depth])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x, comp_origin.y-y_depth, comp_origin.z-cdef.bounds.depth])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y, comp_origin.z-cdef.bounds.depth])
+						inst.transform!(trans)
 					end
 				end
-				# puts x_offset, y_offset, z_offset
-				#comp_trans 	= Geom::Transformation.new([x_offset, y_offset, z_offset])
-				#Sketchup.active_model.entities.add_instance defn, comp_trans
-				tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, wall_trans.degrees)
-				inst    = Sketchup.active_model.active_entities.add_instance defn, tr
-				comp_trans 	= Geom::Transformation.new([x_offset, y_offset, z_offset])
-				inst.transform!(comp_trans)
-				flag = false
-				if inst
+				if inst && !V2_V3_CONVERSION_FLAG
 					wall_overlap_flag 	= DP::check_wall_overlap(inst, space_name)
 					comp_over_flag 		= DP::check_comp_overlap(inst, space_name)
 					comp_floor_overlap 	= DP::check_comp_floor_overlap(inst, space_name)
 					comp_ceiling_overlap 	= DP::check_comp_ceiling_overlap(inst, space_name)
+
 					# puts "wall_overlap_flag : #{wall_overlap_flag} : #{comp_over_flag}, "
 					if wall_overlap_flag
 						UI.messagebox "Component Overlaps the wall. Cannot place it."
@@ -628,27 +553,337 @@ module Decor_Standards
 					else
 						Sketchup.active_model.selection.clear
 						Sketchup.active_model.selection.add(inst)
-						inst.set_attribute :rio_atts, 'space_name', space_name
-						DP::update_all_room_components
 					end
 				end
-				Sketchup.active_model.set_attribute(:rio_global, 'wall_xy_point', nil)
+
 			else
-				if options['edit'] == 1
-					inst = Sketchup.active_model.entities.add_instance defn, comp_trans
+				wall_offset_point   = Sketchup.active_model.get_attribute(:rio_atts, 'wall_offset_pt')
+				if wall_offset_point
+					place_type = 'wall'
 				else
-					placecomp = Sketchup.active_model.place_component defn
+					place_type = 'manual'
+				end
+				RIO::CivilHelper::place_component defn, place_type
+			end
+		else
+			if options['auto_mode'] == "true"
+				sel_comp = Sketchup.active_model.selection[0]
+				if sel_comp.nil?
+					UI.messagebox 'Component not selected for auto mode. Select component and retry or switch off auto mode.', MB_OK
+					return false
+				end 
+				if sel_comp.layer.name != 'DP_Comp_layer'
+					UI.messagebox 'Select Rio component for auto mode', MB_OK
+					return false
+				end
+				rotz = sel_comp.transformation.rotz
+				comp_origin = sel_comp.transformation.origin
+				cdef = defn
+				sel_bounds = sel_comp.bounds
+				comp = sel_comp 
+
+				posn = options['auto_position']
+				case posn
+				when 'bottom_left'
+					# puts "bottom_left : #{rotz}"
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					case rotz
+					when 0
+						trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.width, comp_origin.y+y_depth, comp_origin.z])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y-cdef.bounds.width, comp_origin.z])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.width, comp_origin.y-y_depth, comp_origin.z])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y+cdef.bounds.width, comp_origin.z])
+						inst.transform!(trans)
+					end
+				when 'front'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+									
+									rotz.abs==180 ? corner_rotz=rotz+90 : corner_rotz=-90
+					# puts "corner_rotz : #{corner_rotz}"
+					
+					case rotz
+					when 0
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 90.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.height, comp_origin.y-cdef.bounds.width, comp_origin.z])
+						inst.transform!(trans)
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 180.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.width, comp_origin.y+cdef.bounds.height, comp_origin.z])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 270.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.height, comp_origin.y+cdef.bounds.width, comp_origin.z])
+						inst.transform!(trans)
+					when -90
+						#tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, 0.degrees)
+						#inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.width, comp_origin.y-cdef.bounds.height, comp_origin.z])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+						#inst.transform!(trans)
+					end
+				when 'top_left'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					case rotz
+					when 0
+						trans   = Geom::Transformation.new([comp_origin.x-cdef.bounds.width, comp_origin.y+y_depth, comp_origin.z+z_depth])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y-cdef.bounds.width, comp_origin.z+z_depth])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+cdef.bounds.width, comp_origin.y-y_depth,  comp_origin.z+z_depth])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y+cdef.bounds.width,  comp_origin.z+z_depth])
+						inst.transform!(trans)
+					end
+				when 'bottom_right'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					# puts "x_depth : #{x_depth} : #{comp.bounds.width} : #{cdef.bounds.width}"
+					case rotz
+					when 0
+						trans   = Geom::Transformation.new([comp_origin.x+sel_comp.bounds.width, comp_origin.y+y_depth, comp_origin.z])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y+sel_comp.bounds.height, comp_origin.z])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x-sel_comp.bounds.width, comp_origin.y-y_depth, comp_origin.z])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y-sel_comp.bounds.height, comp_origin.z])
+						inst.transform!(trans)
+					end
+				when 'top_right'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					case rotz
+					when 0
+						trans   = Geom::Transformation.new([comp_origin.x+sel_comp.bounds.width, comp_origin.y+y_depth, comp_origin.z+z_depth])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y+comp.bounds.height, comp_origin.z+z_depth])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x-sel_comp.bounds.width, comp_origin.y-y_depth,  comp_origin.z+z_depth])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y-sel_comp.bounds.height,  comp_origin.z+z_depth])
+						inst.transform!(trans)
+					end
+				when 'top'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					# puts "comp_origin.x : #{comp_origin.x} : #{x_depth}"
+					case rotz
+					when 0
+						trans   = Geom::Transformation.new([comp_origin.x, comp_origin.y+y_depth, comp_origin.z+comp.bounds.depth])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y, comp_origin.z+comp.bounds.depth])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x, comp_origin.y-y_depth, comp_origin.z+comp.bounds.depth])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans 	= Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y, comp_origin.z+comp.bounds.depth])
+						inst.transform!(trans)
+					end
+				when 'bottom'
+					z_depth 	= comp.bounds.depth-cdef.bounds.depth
+					y_depth     = comp.bounds.height-cdef.bounds.height
+					x_depth		= comp.bounds.width-cdef.bounds.height
+					case rotz
+					when 0
+						trans   = Geom::Transformation.new([comp_origin.x, comp_origin.y+y_depth, comp_origin.z-cdef.bounds.depth])
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, trans
+					when 90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans   = Geom::Transformation.new([comp_origin.x-x_depth, comp_origin.y, comp_origin.z-cdef.bounds.depth])
+						inst.transform!(trans)
+					when 180, -180
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x, comp_origin.y-y_depth, comp_origin.z-cdef.bounds.depth])
+						inst.transform!(trans)
+					when -90
+						tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, rotz.degrees)
+						inst    = Sketchup.active_model.active_entities.add_instance cdef, tr
+						trans = Geom::Transformation.new([comp_origin.x+x_depth, comp_origin.y, comp_origin.z-cdef.bounds.depth])
+						inst.transform!(trans)
+					end
+				end
+				if inst && !V2_V3_CONVERSION_FLAG
+					wall_overlap_flag 	= DP::check_wall_overlap(inst, space_name)
+					comp_over_flag 		= DP::check_comp_overlap(inst, space_name)
+					comp_floor_overlap 	= DP::check_comp_floor_overlap(inst, space_name)
+					comp_ceiling_overlap 	= DP::check_comp_ceiling_overlap(inst, space_name)
+
+					# puts "wall_overlap_flag : #{wall_overlap_flag} : #{comp_over_flag}, "
+					if wall_overlap_flag
+						UI.messagebox "Component Overlaps the wall. Cannot place it."
+						Sketchup.active_model.entities.erase_entities inst
+					elsif comp_over_flag
+						UI.messagebox "Component Overlaps the selected component. Cannot place it. Removing the new instance."
+						Sketchup.active_model.entities.erase_entities inst 
+					elsif comp_floor_overlap
+						UI.messagebox "Component placement will make it go below room bounds. Cannot place it."
+						Sketchup.active_model.entities.erase_entities inst
+					elsif comp_ceiling_overlap
+						UI.messagebox "Component placement will make it go above room ceiling bounds. Cannot place it."
+						Sketchup.active_model.entities.erase_entities inst
+					else
+						Sketchup.active_model.selection.clear
+						Sketchup.active_model.selection.add(inst)
+					end
+				end
+
+				# puts "trans: #{trans}"
+			else
+				xy_point 		= Sketchup.active_model.get_attribute :rio_global, 'wall_xy_point'
+				offset_side 	= Sketchup.active_model.get_attribute :rio_global, 'wall_offset_side'
+				if xy_point
+					sel 		= Sketchup.active_model.selection[0]
+					if sel.nil?
+						pid = Sketchup.active_model.get_attribute :rio_global, 'wall_selected'
+						sel = DP::get_comp_pid pid.to_i
+					end
+					wall_trans 	= sel.get_attribute :rio_atts, 'wall_trans'
+					z_offset	= xy_point[0].to_i.mm
+					if offset_side == 'left'
+						case wall_trans.to_i.round
+						when 0
+							x_offset 	= sel.bounds.corner(0).x + xy_point[1].to_i.mm
+							y_offset 	= sel.bounds.corner(0).y-defn.bounds.height 
+						when 90
+							x_offset 	= sel.bounds.corner(1).x + defn.bounds.height
+							y_offset  	= sel.bounds.corner(1).y+xy_point[1].to_i.mm
+						when -90
+							x_offset 	= sel.bounds.corner(2).x - defn.bounds.height
+							y_offset  	= sel.bounds.corner(2).y-xy_point[1].to_i.mm
+						when 180
+							x_offset 	= sel.bounds.corner(1).x - xy_point[1].to_i.mm
+							y_offset    = sel.bounds.corner(3).y + defn.bounds.height
+						end
+					elsif offset_side == 'right'
+						wall_length = sel.get_attribute(:rio_atts, 'view_wall_length').to_i.mm
+						case wall_trans.to_i.round 
+						when 0
+							x_offset 	= sel.bounds.corner(0).x - xy_point[1].to_i.mm + wall_length - defn.bounds.width
+							y_offset 	= sel.bounds.corner(0).y - defn.bounds.height 
+						when 90
+							x_offset 	= sel.bounds.corner(1).x + defn.bounds.height 
+							y_offset 	= sel.bounds.corner(1).y + wall_length - defn.bounds.width - xy_point[1].to_i.mm
+						when -90
+							x_offset 	= sel.bounds.corner(2).x - defn.bounds.height 
+							y_offset 	= sel.bounds.corner(2).y - wall_length + defn.bounds.width + xy_point[1].to_i.mm
+						when 180, -180
+							x_offset 	= sel.bounds.corner(3).x - wall_length + defn.bounds.width + xy_point[1].to_i.mm
+							y_offset 	= sel.bounds.corner(3).y + defn.bounds.height
+						end
+					end
+					# puts x_offset, y_offset, z_offset
+					#comp_trans 	= Geom::Transformation.new([x_offset, y_offset, z_offset])
+					#Sketchup.active_model.entities.add_instance defn, comp_trans
+					tr      = Geom::Transformation.rotation([0, 0, 0], Z_AXIS, wall_trans.degrees)
+					inst    = Sketchup.active_model.active_entities.add_instance defn, tr
+					comp_trans 	= Geom::Transformation.new([x_offset, y_offset, z_offset])
+					inst.transform!(comp_trans)
+					flag = false
+					if inst
+						wall_overlap_flag 	= DP::check_wall_overlap(inst, space_name)
+						comp_over_flag 		= DP::check_comp_overlap(inst, space_name)
+						comp_floor_overlap 	= DP::check_comp_floor_overlap(inst, space_name)
+						comp_ceiling_overlap 	= DP::check_comp_ceiling_overlap(inst, space_name)
+						# puts "wall_overlap_flag : #{wall_overlap_flag} : #{comp_over_flag}, "
+						if wall_overlap_flag
+							UI.messagebox "Component Overlaps the wall. Cannot place it."
+							Sketchup.active_model.entities.erase_entities inst
+						elsif comp_over_flag
+							UI.messagebox "Component Overlaps the selected component. Cannot place it. Removing the new instance."
+							Sketchup.active_model.entities.erase_entities inst 
+						elsif comp_floor_overlap
+							UI.messagebox "Component placement will make it go below room bounds. Cannot place it."
+							Sketchup.active_model.entities.erase_entities inst
+						elsif comp_ceiling_overlap
+							UI.messagebox "Component placement will make it go above room ceiling bounds. Cannot place it."
+							Sketchup.active_model.entities.erase_entities inst
+						else
+							Sketchup.active_model.selection.clear
+							Sketchup.active_model.selection.add(inst)
+							inst.set_attribute :rio_atts, 'space_name', space_name
+							DP::update_all_room_components
+						end
+					end
+					Sketchup.active_model.set_attribute(:rio_global, 'wall_xy_point', nil)
+				else
+					puts "Manual Comp placement "
+					if options['edit'] == 1
+						inst = Sketchup.active_model.entities.add_instance defn, comp_trans
+					else
+						inst = Sketchup.active_model.place_component defn
+					end
 				end
 			end
 		end
-		# puts "inst : #{inst}"
+		puts "inst : #{inst} : #{options}"
 		if inst
 			if inst.is_a?(Sketchup::ComponentInstance) && !inst.deleted?
 				dictionaries = ['carcass_spec', 'rio_atts']
 				inst.definition.attribute_dictionaries.each{|dict|
 					next if !dictionaries.include?(dict.name)
 					dict.each_pair {|key,val| 
-						# puts "comp_group : #{key} : #{val} : #{dict_name}"
+						puts "comp_group : #{key} : #{val} : #{dict_name}"
 						inst.set_attribute dict.name, key, val 
 					}
 				}
@@ -656,7 +891,7 @@ module Decor_Standards
 		end
 		Sketchup.active_model.active_layer = prev_active_layer
 		return true
-  	end
+  end
 
 	def self.get_datas(inp, type)
 		valhash = []
